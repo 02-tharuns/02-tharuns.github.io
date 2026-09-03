@@ -1,0 +1,13 @@
+{
+  "name": "portfolio-rag",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "python3 scripts/build_corpus.py",
+    "eval": "node evals/run_evals.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

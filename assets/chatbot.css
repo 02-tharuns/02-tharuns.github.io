@@ -1,0 +1,286 @@
+/* ============================================================================
+ * Portfolio RAG — interface
+ * Inherits the site's tokens (--cyan, --violet, --bg-*, --text-*) with
+ * fallbacks so the widget still renders correctly if dropped into any page.
+ * ========================================================================== */
+
+.rag-root{
+  --rag-cyan:var(--cyan,#ff7a18);
+  --rag-violet:var(--violet,#ec1e62);
+  --rag-bg:var(--bg-1,#1a0e09);
+  --rag-bg-2:var(--bg-2,#241309);
+  --rag-line:var(--border,rgba(255,255,255,.09));
+  --rag-line-hi:var(--border-hi,rgba(255,255,255,.18));
+  --rag-t0:var(--text-0,#fcf4ee);
+  --rag-t1:var(--text-1,#e3d2c6);
+  --rag-t2:var(--text-2,#ad9585);
+  --rag-t3:var(--text-3,#7a6558);
+  --rag-mono:var(--font-mono,'JetBrains Mono',ui-monospace,monospace);
+  --rag-body:var(--font-body,'Inter',system-ui,sans-serif);
+  --rag-display:var(--font-display,'Space Grotesk',system-ui,sans-serif);
+  --rag-ease:cubic-bezier(.16,1,.3,1);
+
+  position:fixed; right:24px; bottom:24px; z-index:9000;
+  font-family:var(--rag-body);
+  display:flex; flex-direction:column; align-items:flex-end; gap:14px;
+}
+
+/* ---------- launcher ---------- */
+.rag-launcher{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:13px 20px 13px 17px; border-radius:999px; cursor:pointer;
+  font-family:var(--rag-display); font-size:14px; font-weight:600; letter-spacing:-.01em;
+  color:#120a07;
+  background:linear-gradient(100deg,var(--rag-cyan) 0%,var(--rag-violet) 100%);
+  border:none;
+  box-shadow:0 6px 28px -8px rgba(255,122,24,.5), 0 2px 8px rgba(0,0,0,.4);
+  transition:transform .3s var(--rag-ease), box-shadow .3s var(--rag-ease);
+}
+.rag-launcher:hover{ transform:translateY(-2px); box-shadow:0 12px 36px -8px rgba(255,122,24,.62), 0 2px 8px rgba(0,0,0,.45); }
+.rag-launcher:active{ transform:translateY(0); }
+.rag-launcher-dot{
+  width:8px; height:8px; border-radius:50%; background:#120a07;
+  box-shadow:0 0 0 3px rgba(18,10,7,.22);
+  animation:rag-pulse 2.4s var(--rag-ease) infinite;
+}
+@keyframes rag-pulse{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.8)} }
+.rag-root.is-open .rag-launcher{ opacity:0; pointer-events:none; transform:translateY(8px) scale(.96); }
+
+/* ---------- panel ---------- */
+.rag-panel{
+  width:min(408px, calc(100vw - 32px));
+  max-height:min(624px, calc(100vh - 120px));
+  display:flex; flex-direction:column; overflow:hidden;
+  background:color-mix(in srgb, var(--rag-bg) 92%, transparent);
+  backdrop-filter:blur(20px) saturate(1.3);
+  -webkit-backdrop-filter:blur(20px) saturate(1.3);
+  border:1px solid var(--rag-line-hi); border-radius:18px;
+  box-shadow:0 30px 90px -24px rgba(0,0,0,.85), 0 0 0 1px rgba(255,122,24,.07);
+  animation:rag-in .34s var(--rag-ease) both;
+}
+@keyframes rag-in{ from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
+.rag-panel[hidden]{ display:none; }
+
+.rag-head{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+  padding:18px 18px 15px; border-bottom:1px solid var(--rag-line);
+  background:linear-gradient(180deg, rgba(255,122,24,.055), transparent);
+}
+.rag-title{
+  margin:0 0 4px; font-family:var(--rag-display); font-size:15px; font-weight:600;
+  letter-spacing:-.01em; color:var(--rag-t0);
+}
+.rag-sub{ margin:0; font-size:11px; line-height:1.45; color:var(--rag-t3); max-width:30ch; }
+.rag-close{
+  flex:none; width:28px; height:28px; border-radius:8px; cursor:pointer;
+  background:transparent; border:1px solid var(--rag-line);
+  color:var(--rag-t2); font-size:19px; line-height:1;
+  transition:color .2s, border-color .2s, background .2s;
+}
+.rag-close:hover{ color:var(--rag-t0); border-color:var(--rag-line-hi); background:rgba(255,255,255,.05); }
+
+/* ---------- transcript ---------- */
+.rag-log{
+  flex:1 1 auto; min-height:150px; overflow-y:auto;
+  padding:18px; display:flex; flex-direction:column; gap:13px;
+  scrollbar-width:thin; scrollbar-color:var(--rag-line-hi) transparent;
+}
+.rag-log::-webkit-scrollbar{ width:8px; }
+.rag-log::-webkit-scrollbar-thumb{ background:var(--rag-line-hi); border-radius:99px; }
+
+.rag-msg{
+  font-size:13.5px; line-height:1.6; max-width:92%;
+  animation:rag-msg-in .28s var(--rag-ease) both;
+}
+@keyframes rag-msg-in{ from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.rag-msg p{ margin:0 0 9px; }
+.rag-msg p:last-child{ margin-bottom:0; }
+
+.rag-user{
+  align-self:flex-end; padding:9px 14px; border-radius:14px 14px 4px 14px;
+  background:var(--grad-brand-soft,linear-gradient(100deg,rgba(255,122,24,.16),rgba(236,30,98,.16)));
+  border:1px solid rgba(255,122,24,.24); color:var(--rag-t0);
+}
+.rag-bot{ align-self:flex-start; color:var(--rag-t1); }
+.rag-lead{ color:var(--rag-t2); font-size:12.5px; }
+.rag-muted{ color:var(--rag-t3); font-size:12px; font-style:italic; }
+.rag-bot a{ color:var(--rag-cyan); }
+
+.rag-quote{
+  margin:0 0 10px; padding:11px 13px;
+  border-left:2px solid var(--rag-cyan);
+  border-radius:0 10px 10px 0;
+  background:var(--surface,rgba(255,255,255,.035));
+  color:var(--rag-t0); font-size:13px; line-height:1.62;
+}
+.rag-quote:last-child{ margin-bottom:0; }
+
+.rag-cite{
+  display:inline-block; margin-top:9px; padding:3px 9px;
+  font-family:var(--rag-mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--rag-cyan); background:rgba(255,122,24,.09);
+  border:1px solid rgba(255,122,24,.3); border-radius:999px;
+  cursor:pointer; transition:background .2s, color .2s, transform .2s;
+}
+.rag-cite::before{ content:"↗ "; }
+.rag-cite:hover{ background:rgba(255,122,24,.2); color:#fff3e0; transform:translateY(-1px); }
+
+/* Source card — one row per retrieved chunk, under an answer. Dark rounded
+   panel, thin dividers between rows, a monospace id chip per row: the same
+   rhythm as the rest of the widget, just reused for citations instead of
+   scroll-to-page as the only way to see what was actually matched. */
+.rag-sources{
+  margin:2px 0 10px; border:1px solid var(--rag-line); border-radius:12px;
+  background:color-mix(in srgb, var(--rag-bg-2) 60%, transparent);
+  overflow:hidden;
+}
+.rag-sources:last-child{ margin-bottom:0; }
+.rag-source-row{
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 12px; border-bottom:1px solid var(--rag-line);
+}
+.rag-source-row:last-child{ border-bottom:none; }
+.rag-src-n{
+  flex:none; width:16px; height:16px; margin-top:1px; border-radius:5px;
+  background:rgba(255,122,24,.14); color:var(--rag-cyan);
+  font-family:var(--rag-mono); font-size:9.5px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+.rag-src-body{ min-width:0; flex:1; }
+.rag-src-heading{
+  margin:0 0 4px; font-family:var(--rag-display); font-size:12.5px; font-weight:600;
+  color:var(--rag-t0); letter-spacing:-.005em; line-height:1.4;
+}
+.rag-src-id{
+  display:inline-block; margin:0 0 0 2px; padding:1px 6px;
+  font-family:var(--rag-mono); font-size:9px; letter-spacing:.03em; font-weight:400;
+  text-transform:none; vertical-align:1px;
+}
+.rag-src-domain{
+  margin:0 0 5px; font-family:var(--rag-mono); font-size:9px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--rag-t3);
+}
+.rag-src-snippet{ margin:0; font-size:11.5px; line-height:1.55; color:var(--rag-t2); }
+.rag-ref{
+  font-family:var(--rag-mono); font-size:9.5px; color:var(--rag-cyan);
+  margin-left:1px;
+}
+
+.rag-refusal .rag-quote{ border-left-color:var(--rag-violet); }
+.rag-r-injection{ color:var(--amber,#ffc12e); }
+.rag-r-no_evidence .rag-muted{ color:var(--rag-violet); font-style:normal; }
+
+.rag-dots{ display:inline-flex; gap:4px; padding:5px 2px; }
+.rag-dots i{
+  width:5px; height:5px; border-radius:50%; background:var(--rag-t3);
+  animation:rag-bounce 1.3s var(--rag-ease) infinite;
+}
+.rag-dots i:nth-child(2){ animation-delay:.16s; }
+.rag-dots i:nth-child(3){ animation-delay:.32s; }
+@keyframes rag-bounce{ 0%,60%,100%{opacity:.3;transform:translateY(0)} 30%{opacity:1;transform:translateY(-4px)} }
+
+/* ---------- suggestions ---------- */
+.rag-suggest{
+  display:flex; flex-wrap:wrap; gap:6px;
+  padding:0 18px 14px; border-top:1px solid transparent;
+}
+.rag-suggest.rag-hidden{ display:none; }
+.rag-chip{
+  padding:6px 11px; border-radius:999px; cursor:pointer;
+  font-family:var(--rag-body); font-size:11.5px; color:var(--rag-t2);
+  background:var(--surface,rgba(255,255,255,.035));
+  border:1px solid var(--rag-line);
+  transition:color .2s, border-color .2s, background .2s;
+}
+.rag-chip:hover{ color:var(--rag-t0); border-color:rgba(255,122,24,.4); background:rgba(255,122,24,.08); }
+
+/* ---------- composer ---------- */
+.rag-form{
+  display:flex; gap:8px; align-items:center;
+  padding:13px 14px; border-top:1px solid var(--rag-line);
+  background:var(--rag-bg-2);
+}
+.rag-input{
+  flex:1; min-width:0; padding:10px 13px; border-radius:11px;
+  font-family:var(--rag-body); font-size:13.5px; color:var(--rag-t0);
+  background:rgba(255,255,255,.04); border:1px solid var(--rag-line);
+  transition:border-color .2s, background .2s;
+}
+.rag-input::placeholder{ color:var(--rag-t3); }
+.rag-input:focus{ outline:none; border-color:rgba(255,122,24,.5); background:rgba(255,255,255,.06); }
+.rag-send{
+  flex:none; width:38px; height:38px; border-radius:11px; cursor:pointer;
+  display:grid; place-items:center; color:#120a07; border:none;
+  background:linear-gradient(100deg,var(--rag-cyan) 0%,var(--rag-violet) 100%);
+  transition:transform .2s var(--rag-ease), filter .2s;
+}
+.rag-send:hover{ transform:translateX(1px); filter:brightness(1.08); }
+
+.rag-foot{
+  margin:0; padding:0 18px 14px;
+  font-family:var(--rag-mono); font-size:9.5px; letter-spacing:.05em;
+  color:var(--rag-t3); text-align:center; background:var(--rag-bg-2);
+}
+
+/* ---------- citation target highlight on the page itself ---------- */
+.rag-flash{ animation:rag-flash 1.6s var(--rag-ease); }
+@keyframes rag-flash{
+  0%{ box-shadow:inset 0 0 0 0 rgba(255,122,24,0); }
+  22%{ box-shadow:inset 0 0 90px -18px rgba(255,122,24,.42); }
+  100%{ box-shadow:inset 0 0 0 0 rgba(255,122,24,0); }
+}
+
+/* ---------- focus and motion ---------- */
+.rag-root :focus-visible{ outline:2px solid var(--rag-cyan); outline-offset:2px; border-radius:8px; }
+
+@media (max-width:560px){
+  .rag-root{ right:14px; bottom:14px; left:14px; align-items:stretch; }
+  .rag-launcher{ align-self:flex-end; }
+  .rag-panel{ width:100%; max-height:min(78vh, calc(100vh - 96px)); }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .rag-root *{ animation:none !important; transition:none !important; }
+}
+
+/* ---------- not-published deflection ---------- */
+.rag-r-not_published{ color:var(--rag-t1); }
+.rag-r-not_published strong{ color:var(--rag-cyan); font-weight:600; }
+.rag-bot a.rag-mail,
+.rag-mail{
+  display:inline-block; margin-top:4px; padding:8px 15px; border-radius:999px;
+  font-size:12.5px; font-weight:700; letter-spacing:.01em; text-decoration:none;
+  color:#160b04; background:var(--rag-cyan);
+  box-shadow:0 3px 14px -4px rgba(255,122,24,.55);
+  transition:transform .2s var(--rag-ease), filter .2s;
+}
+.rag-bot a.rag-mail:hover{ transform:translateY(-1px); filter:brightness(1.08); color:#160b04; }
+.rag-mail:hover{ transform:translateY(-1px); filter:brightness(1.08); }
+
+/* ---------- Chappie's mark ---------- */
+.rag-launcher-mark{ width:19px; height:19px; flex:none; color:#120a07; }
+.rag-head-id{ display:flex; align-items:flex-start; gap:11px; }
+.rag-head-mark{
+  width:30px; height:30px; flex:none; padding:5px; border-radius:9px; box-sizing:border-box;
+  color:var(--rag-cyan); background:rgba(255,122,24,.12); border:1px solid rgba(255,122,24,.3);
+}
+.rag-bot{ display:flex; align-items:flex-start; gap:9px; max-width:96%; }
+.rag-av{
+  flex:none; width:26px; height:26px; margin-top:1px; display:grid; place-items:center;
+  border-radius:8px; color:var(--rag-cyan);
+  background:rgba(255,122,24,.11); border:1px solid rgba(255,122,24,.26);
+}
+.rag-av-mark{ width:16px; height:16px; }
+.rag-body{ min-width:0; flex:1; }
+.rag-thinking .rag-av{ animation:rag-think 1.4s var(--rag-ease) infinite; }
+@keyframes rag-think{ 0%,100%{opacity:.45} 50%{opacity:1} }
+@media (prefers-reduced-motion:reduce){ .rag-thinking .rag-av{ animation:none; } }
+
+/* ---------- streaming caret ---------- */
+.rag-caret{
+  display:inline-block; width:2px; height:1em; margin-left:2px;
+  vertical-align:-2px; background:var(--rag-cyan);
+  animation:rag-blink 1s steps(2,end) infinite;
+}
+@keyframes rag-blink{ 50%{ opacity:0; } }
+@media (prefers-reduced-motion:reduce){ .rag-caret{ animation:none; } }

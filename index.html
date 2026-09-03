@@ -6,35 +6,50 @@
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Tharun Subramanya — Applied AI/ML for industrial systems, edge IoT, and robotics. M.S. Artificial Intelligence, University of Michigan-Dearborn.">
 <title>Tharun Subramanya — AI / ML / Industrial IoT / Robotics</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%2305070d'/%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23a78bfa'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23120a07'/%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%2322d3ee' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23ec1e62'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/chatbot.css">
 <style>
 /* ============================================================
    TOKENS
    ============================================================ */
 :root{
-  --bg:#05070d;
-  --bg-1:#080b14;
-  --bg-2:#0b0f1c;
+  --bg:#120a07;
+  --bg-1:#1a0e09;
+  --bg-2:#241309;
   --surface:rgba(255,255,255,0.035);
   --surface-hi:rgba(255,255,255,0.065);
   --border:rgba(255,255,255,0.09);
   --border-hi:rgba(255,255,255,0.18);
-  --text-0:#f2f4fa;
-  --text-1:#c4cbdc;
-  --text-2:#8b93ab;
-  --text-3:#5b6480;
-  --cyan:#2dd4ee;
-  --cyan-soft:#7fe6f4;
-  --violet:#a78bfa;
-  --violet-soft:#c7b8fd;
-  --amber:#fbbf6d;
-  --cyan-glow:rgba(45,212,238,0.55);
-  --violet-glow:rgba(167,139,250,0.55);
-  --grad-brand:linear-gradient(100deg,var(--cyan) 0%,var(--violet) 100%);
-  --grad-brand-soft:linear-gradient(100deg,rgba(45,212,238,0.16),rgba(167,139,250,0.16));
+  --text-0:#fcf4ee;
+  --text-1:#e3d2c6;
+  --text-2:#ad9585;
+  --text-3:#7a6558;
+  /* Chappie palette: flame, gold, magenta over rust and warm near-black. */
+  --flame:#ff7a18;
+  --gold:#ffc12e;
+  --magenta:#ec1e62;
+  --pink:#ff6fa0;
+  --rust:#b3350c;
+  --cream:#ffe9d6;
+  /* Aliases so existing rules keep working. */
+  --cyan:var(--flame);
+  --cyan-soft:var(--gold);
+  --violet:var(--magenta);
+  --violet-soft:var(--pink);
+  --amber:var(--gold);
+  /* Legacy aliases so existing rules keep working. */
+  --cyan:var(--flame);
+  --cyan-soft:var(--gold);
+  --violet:var(--magenta);
+  --violet-soft:var(--pink);
+  --amber:var(--gold);
+  --cyan-glow:rgba(255,122,24,0.55);
+  --violet-glow:rgba(236,30,98,0.55);
+  --grad-brand:linear-gradient(100deg,var(--flame) 0%,var(--gold) 40%,var(--magenta) 100%);
+  --grad-brand-soft:linear-gradient(100deg,rgba(255,122,24,0.18),rgba(236,30,98,0.14));
   --font-display:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,'Liberation Mono',monospace;
@@ -112,8 +127,8 @@ html{scrollbar-color:var(--violet) var(--bg);scrollbar-width:thin;}
    BACKGROUND / CANVAS / FX LAYERS
    ============================================================ */
 #bg-canvas{
-  position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;
-  background:radial-gradient(ellipse 80% 60% at 50% -10%,#0d1326 0%,var(--bg) 60%);
+  position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;opacity:.5;
+  background:radial-gradient(ellipse 88% 68% at 64% -6%,#6b2408 0%,#301207 36%,var(--bg) 74%),radial-gradient(ellipse 55% 45% at 8% 104%,#4a1020 0%,transparent 62%);
 }
 .grain-overlay{
   position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
@@ -130,7 +145,7 @@ html{scrollbar-color:var(--violet) var(--bg);scrollbar-width:thin;}
 }
 #cursor-dot{width:6px;height:6px;background:var(--cyan);box-shadow:0 0 10px 2px var(--cyan-glow);}
 #cursor-ring{width:34px;height:34px;border:1px solid var(--border-hi);transition:width .25s var(--ease-out),height .25s var(--ease-out),border-color .25s,background .25s,opacity .3s ease;}
-#cursor-ring.is-active{width:56px;height:56px;border-color:var(--cyan);background:rgba(45,212,238,0.08);}
+#cursor-ring.is-active{width:56px;height:56px;border-color:var(--cyan);background:rgba(255,122,24,0.08);}
 body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;}
 
 /* ============================================================
@@ -161,11 +176,11 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 #navbar{
   position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);
   display:flex;align-items:center;
-  background:rgba(5,7,13,0);border-bottom:1px solid transparent;
+  background:rgba(18,10,7,0);border-bottom:1px solid transparent;
   transition:background .4s var(--ease-out),border-color .4s var(--ease-out),backdrop-filter .4s;
 }
 #navbar.is-scrolled{
-  background:rgba(6,8,16,0.72);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+  background:rgba(14,8,5,0.72);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
   border-bottom-color:var(--border);
 }
 .nav-inner{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:28px;display:flex;align-items:center;justify-content:space-between;}
@@ -197,7 +212,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 .nav-toggle.is-open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
 
 .mobile-menu{
-  position:fixed;inset:var(--nav-h) 0 0 0;z-index:490;background:rgba(6,8,16,0.98);backdrop-filter:blur(18px);
+  position:fixed;inset:var(--nav-h) 0 0 0;z-index:490;background:rgba(14,8,5,0.98);backdrop-filter:blur(18px);
   display:flex;flex-direction:column;padding:20px 28px 40px;gap:4px;
   transform:translateY(-12px);opacity:0;pointer-events:none;transition:transform .35s var(--ease-out),opacity .35s;
 }
@@ -217,6 +232,83 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 }
 .skip-link:focus{top:12px;}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+/* ============================================================
+   HERO ART: model -> controller -> arm -> car
+   ============================================================ */
+/* Fixed to the viewport rather than the hero, so the workcell stays behind the
+   whole page as the reader scrolls instead of disappearing after the fold. */
+.page-art{
+  transition:opacity .6s var(--ease-out);
+  position:fixed; left:58%; right:auto; top:50%; transform:translateY(-48%);
+  width:min(560px, 38vw); height:auto; z-index:1; pointer-events:none;
+  opacity:.62;
+}
+body.past-hero .page-art{ opacity:.3; }
+.hero-inner{ position:relative; z-index:2; }
+/* Every section paints its own ground, so type never sits directly on the art. */
+.section, footer, #navbar{ position:relative; z-index:2; }
+@media (max-width:1180px){ .page-art{ left:auto; right:-12%; width:82vw; opacity:.34; transform:translateY(-44%); } }
+@media (max-width:760px){ .page-art{ left:auto; top:auto; bottom:0; transform:none; width:150vw; right:-30%; opacity:.18; } }
+
+/* The wheel's angular velocity is the gradient magnitude. It accelerates where
+   the loss curve is steep, then winds down to almost nothing as the curve
+   flattens out, so the spin and the descent are visibly the same event.
+   Three full turns per cycle, so the loop closes seamlessly. */
+.ha-wheel{ transform-origin:250px 190px; animation:ha-descend-spin 12s linear infinite; }
+@keyframes ha-descend-spin{
+  0%   { transform:rotate(0deg); }
+  15%  { transform:rotate(150deg); }
+  30%  { transform:rotate(420deg); }
+  45%  { transform:rotate(700deg); }
+  60%  { transform:rotate(900deg); }
+  75%  { transform:rotate(1010deg); }
+  88%  { transform:rotate(1060deg); }
+  100% { transform:rotate(1080deg); }
+}
+
+/* Nodes lock in cumulatively rather than blinking at random: each iteration
+   converges one more of them, so the wheel visibly finishes what it started. */
+.ha-nodes g{ animation:ha-converge 12s linear infinite both; animation-delay:calc(var(--i) * 1.5s); }
+@keyframes ha-converge{ 0%{opacity:.22} 2%{opacity:1} 100%{opacity:1} }
+
+/* The marker walks the loss curve on the same eight-step beat as the wheel. */
+.ha-step{ offset-path:path("M448 140C480 140 488 198 518 218C552 240 600 244 636 245");
+  offset-distance:0%; animation:ha-descend 12s linear infinite; }
+@keyframes ha-descend{ to{ offset-distance:100%; } }
+
+.ha-hub{ animation:ha-lock 1.5s ease-out infinite; transform-origin:250px 190px; }
+@keyframes ha-lock{ 0%{transform:scale(1.6);opacity:1} 45%{transform:scale(1);opacity:.85} 100%{transform:scale(1);opacity:.5} }
+
+.ha-ping{ transform-origin:250px 190px; animation:ha-ping 1.5s ease-out infinite; }
+@keyframes ha-ping{ 0%{transform:scale(.94);opacity:.55} 70%{transform:scale(1.09);opacity:0} 100%{opacity:0} }
+
+.ha-pulse{ offset-path:path("M250 320C254 402 236 476 214 544"); offset-distance:0%;
+  animation:ha-travel 3.3s linear infinite; animation-delay:var(--d); opacity:.9; }
+@keyframes ha-travel{ 0%{offset-distance:0%;opacity:0} 12%{opacity:1} 88%{opacity:1} 100%{offset-distance:100%;opacity:0} }
+
+.ha-shoulder{ transform-origin:210px 632px; animation:ha-sweep 11s ease-in-out infinite; }
+@keyframes ha-sweep{ 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-2.6deg)} }
+.ha-elbow{ transform-origin:300px 500px; animation:ha-flex 11s ease-in-out infinite; }
+@keyframes ha-flex{ 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(3.4deg)} }
+
+.ha-weld{ animation:ha-spark 11s ease-in-out infinite; transform-origin:452px 508px; }
+@keyframes ha-spark{ 0%,38%{opacity:.12;transform:scale(.6)} 46%{opacity:1;transform:scale(1.15)}
+  52%{opacity:.5;transform:scale(.9)} 58%{opacity:1;transform:scale(1.05)} 70%,100%{opacity:.12;transform:scale(.6)} }
+
+.ha-belt{ animation:ha-roll 1.6s linear infinite; }
+@keyframes ha-roll{ to{ transform:translateX(40px); } }
+
+.ha-car{ animation:ha-settle 11s ease-in-out infinite; }
+@keyframes ha-settle{ 0%,100%{transform:translate(-22px,0)} 50%{transform:translate(-27px,0)} }
+
+
+.ha-blocks rect{ animation:ha-block 6s ease-in-out infinite; animation-delay:calc(var(--i) * .7s); transform-origin:center; transform-box:fill-box; }
+@keyframes ha-block{ 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-6px) rotate(8deg)} }
+@media (prefers-reduced-motion:reduce){
+  .ha-wheel,.ha-nodes g,.ha-hub,.ha-ping,.ha-step,.ha-blocks rect,.ha-pulse,.ha-shoulder,.ha-elbow,.ha-weld,.ha-belt,.ha-car{ animation:none; }
+  .ha-pulse{ opacity:0; }
+}
 </style>
 </head>
 <body>
@@ -227,6 +319,124 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 </div>
 
 <canvas id="bg-canvas" aria-hidden="true"></canvas>
+<svg class="page-art" viewBox="0 0 660 780" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+<defs>
+  <radialGradient id="ha-core" cx="50%" cy="50%">
+    <stop offset="0%" stop-color="#ff7a18" stop-opacity=".5"/><stop offset="100%" stop-color="#ff7a18" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="ha-weld" cx="50%" cy="50%">
+    <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+    <stop offset="32%" stop-color="#ffc12e" stop-opacity=".8"/>
+    <stop offset="100%" stop-color="#ff7a18" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="ha-fade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#fff" stop-opacity=".5"/><stop offset="13%" stop-color="#fff" stop-opacity="1"/>
+    <stop offset="89%" stop-color="#fff" stop-opacity="1"/><stop offset="100%" stop-color="#fff" stop-opacity=".15"/>
+  </linearGradient>
+  <mask id="ha-mask"><rect width="660" height="780" fill="url(#ha-fade)"/></mask>
+</defs>
+
+<g mask="url(#ha-mask)">
+
+  <!-- ===== adaptation wheel: the model, one notch per iteration ===== -->
+  <g class="ha-brain">
+    <ellipse cx="250" cy="190" rx="168" ry="168" fill="url(#ha-core)"/>
+    <g class="ha-wheel">
+      <circle cx="250" cy="190" r="104" stroke="#ffc12e" stroke-width="13" fill="none"/>
+      <circle cx="250" cy="190" r="76" stroke="#ff7a18" stroke-width="8" fill="none" opacity=".85"/>
+      <path d="M250.0 160.0L250.0 118.0M271.2 168.8L300.9 139.1M280.0 190.0L322.0 190.0M271.2 211.2L300.9 240.9M250.0 220.0L250.0 262.0M228.8 211.2L199.1 240.9M220.0 190.0L178.0 190.0M228.8 168.8L199.1 139.1" stroke="#ff7a18" stroke-width="10" stroke-linecap="round"/>
+      <g class="ha-nodes">
+        <g style="--i:0"><circle cx="250.0" cy="86.0" r="16" fill="#ec1e62"/><circle cx="250.0" cy="86.0" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:1"><circle cx="323.5" cy="116.5" r="16" fill="#ec1e62"/><circle cx="323.5" cy="116.5" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:2"><circle cx="354.0" cy="190.0" r="16" fill="#ec1e62"/><circle cx="354.0" cy="190.0" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:3"><circle cx="323.5" cy="263.5" r="16" fill="#ec1e62"/><circle cx="323.5" cy="263.5" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:4"><circle cx="250.0" cy="294.0" r="16" fill="#ec1e62"/><circle cx="250.0" cy="294.0" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:5"><circle cx="176.5" cy="263.5" r="16" fill="#ec1e62"/><circle cx="176.5" cy="263.5" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:6"><circle cx="146.0" cy="190.0" r="16" fill="#ec1e62"/><circle cx="146.0" cy="190.0" r="6.5" fill="#ffe9d6"/></g>
+        <g style="--i:7"><circle cx="176.5" cy="116.5" r="16" fill="#ec1e62"/><circle cx="176.5" cy="116.5" r="6.5" fill="#ffe9d6"/></g>
+      </g>
+    </g>
+    <circle cx="250" cy="190" r="30" fill="#ff7a18"/>
+    <circle cx="250" cy="190" r="18" fill="#ffc12e"/>
+    <circle class="ha-hub" cx="250" cy="190" r="8" fill="#ffe9d6"/>
+    <circle class="ha-ping" cx="250" cy="190" r="112" stroke="#ffc12e" stroke-width="3" fill="none"/>
+  </g>
+
+  <g class="ha-blocks" fill="#ffc12e">
+    <rect x="472" y="332" width="18" height="18" rx="4" opacity=".5" style="--i:0"/>
+    <rect x="504" y="360" width="12" height="12" rx="3" opacity=".34" style="--i:1"/>
+    <rect x="76"  y="356" width="15" height="15" rx="3" opacity=".4"  style="--i:2"/>
+    <rect x="560" y="612" width="16" height="16" rx="4" opacity=".36" style="--i:4"/>
+    <rect x="120" y="96"  width="13" height="13" rx="3" opacity=".3"  style="--i:5"/>
+  </g>
+
+  <!-- ===== loss curve ===== -->
+  <g class="ha-loss">
+    <path d="M440 266V132M440 266H646" stroke="#b3350c" stroke-width="3" stroke-linecap="round"/>
+    <path d="M448 140C480 140 488 198 518 218C552 240 600 244 636 245V266H448Z" fill="#ff7a18" opacity=".16"/>
+    <path d="M448 140C480 140 488 198 518 218C552 240 600 244 636 245" stroke="#ffc12e" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <circle class="ha-step" r="7.5" fill="#ffe9d6" stroke="#ec1e62" stroke-width="3"/>
+    <text x="448" y="122" fill="#ffc12e" font-family="'JetBrains Mono',monospace" font-size="11" letter-spacing="2" opacity=".9">LOSS</text>
+    <text x="598" y="288" fill="#ffc12e" font-family="'JetBrains Mono',monospace" font-size="11" letter-spacing="2" opacity=".9">ITER</text>
+  </g>
+
+  <!-- ===== weights out to the controller ===== -->
+  <path d="M250 320C254 402 236 476 214 544" stroke="#ffc12e" stroke-width="4" opacity=".55" stroke-linecap="round" stroke-dasharray="2 16"/>
+  <circle class="ha-pulse" r="5" fill="#ffe9d6" style="--d:0s"/>
+  <circle class="ha-pulse" r="4" fill="#ffc12e" style="--d:1.1s"/>
+  <circle class="ha-pulse" r="4.5" fill="#ffe9d6" style="--d:2.2s"/>
+
+  <g>
+    <rect x="176" y="542" width="62" height="42" rx="10" fill="#b3350c"/>
+    <rect x="176" y="542" width="62" height="42" rx="10" stroke="#ff7a18" stroke-width="3" fill="none"/>
+    <rect x="188" y="554" width="24" height="5" rx="2.5" fill="#ffc12e"/>
+    <rect x="188" y="564" width="38" height="5" rx="2.5" fill="#ffc12e" opacity=".7"/>
+  </g>
+
+  <!-- ===== robotic arm ===== -->
+  <g class="ha-arm">
+    <rect x="146" y="734" width="128" height="30" rx="12" fill="#170b06"/>
+    <path d="M172 734h76l-10-42h-56Z" fill="#b3350c"/>
+    <rect x="184" y="626" width="52" height="80" rx="16" fill="#ff7a18"/>
+    <rect x="196" y="640" width="12" height="52" rx="6" fill="#ffc12e" opacity=".65"/>
+    <g class="ha-shoulder">
+      <path d="M210 632 300 500" stroke="#ff7a18" stroke-width="30" stroke-linecap="round"/>
+      <path d="M222 620 292 516" stroke="#ffc12e" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+      <circle cx="210" cy="632" r="23" fill="#ec1e62"/><circle cx="210" cy="632" r="9" fill="#ffe9d6"/>
+      <g class="ha-elbow">
+        <path d="M300 500 412 468" stroke="#ff7a18" stroke-width="24" stroke-linecap="round"/>
+        <path d="M310 494 402 468" stroke="#ffc12e" stroke-width="6.5" stroke-linecap="round" opacity=".55"/>
+        <circle cx="300" cy="500" r="19" fill="#ec1e62"/><circle cx="300" cy="500" r="7.5" fill="#ffe9d6"/>
+        <path d="M410 452h34a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10h-34Z" fill="#ffc12e" transform="rotate(30 410 470)"/>
+        <circle cx="412" cy="468" r="16" fill="#ec1e62"/><circle cx="412" cy="468" r="6.5" fill="#ffe9d6"/>
+        <circle class="ha-weld" cx="452" cy="508" r="24" fill="url(#ha-weld)"/>
+        <circle class="ha-weld" cx="452" cy="508" r="4" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== car on the line ===== -->
+  <g class="ha-car" transform="translate(-22,0)">
+    <path d="M372 618v-48c0-15 9-27 24-32l42-14 36-30c9-7 18-11 29-11h58c12 0 22 5 29 13l31 36 23 8c14 5 22 16 22 30v48c0 8-7 15-15 15H387c-8 0-15-7-15-15Z" fill="#ff7a18"/>
+    <path d="M372 600h294v18c0 8-7 15-15 15H387c-8 0-15-7-15-15Z" fill="#b3350c" opacity=".55"/>
+    <path d="M448 496l30-25c7-6 14-9 23-9h48c9 0 17 4 23 11l22 25Z" fill="#ffc12e"/>
+    <rect x="500" y="470" width="6" height="26" rx="3" fill="#ff7a18" opacity=".8"/>
+    <rect x="404" y="556" width="52" height="9" rx="4.5" fill="#ffe9d6" opacity=".55"/>
+    <circle cx="452" cy="632" r="32" fill="#170b06"/><circle cx="452" cy="632" r="14" fill="#ec1e62"/><circle cx="452" cy="632" r="5" fill="#ffe9d6"/>
+    <circle cx="580" cy="632" r="32" fill="#170b06"/><circle cx="580" cy="632" r="14" fill="#ec1e62"/><circle cx="580" cy="632" r="5" fill="#ffe9d6"/>
+  </g>
+
+  <!-- ===== conveyor ===== -->
+  <rect x="316" y="676" width="322" height="28" rx="14" fill="#b3350c"/>
+  <g class="ha-belt" fill="#ffc12e" opacity=".85">
+    <circle cx="352" cy="690" r="8"/><circle cx="392" cy="690" r="8"/><circle cx="432" cy="690" r="8"/>
+    <circle cx="472" cy="690" r="8"/><circle cx="512" cy="690" r="8"/><circle cx="552" cy="690" r="8"/>
+    <circle cx="592" cy="690" r="8"/><circle cx="632" cy="690" r="8"/>
+  </g>
+
+  <path d="M392 640C332 648 278 626 244 596" stroke="#ec1e62" stroke-width="3" opacity=".35" stroke-linecap="round" stroke-dasharray="2 12"/>
+</g>
+</svg>
 <div class="grain-overlay" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 <div id="cursor-ring" aria-hidden="true"></div>
@@ -268,7 +478,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 .btn-primary{background:var(--grad-brand);color:#04121a;box-shadow:0 8px 30px -8px var(--cyan-glow);}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px -6px var(--cyan-glow);}
 .btn-ghost{background:var(--surface);border-color:var(--border-hi);color:var(--text-0);}
-.btn-ghost:hover{border-color:var(--cyan);background:rgba(45,212,238,0.08);transform:translateY(-2px);}
+.btn-ghost:hover{border-color:var(--cyan);background:rgba(255,122,24,0.08);transform:translateY(-2px);}
 .btn:hover svg{transform:translateX(3px);}
 .btn-block{width:100%;justify-content:center;}
 
@@ -277,7 +487,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
   padding:5px 11px;border-radius:7px;border:1px solid var(--border);color:var(--text-2);background:var(--surface);
   transition:border-color .25s,color .25s,background .25s;
 }
-.tag:hover{border-color:var(--cyan);color:var(--cyan-soft);background:rgba(45,212,238,0.07);}
+.tag:hover{border-color:var(--cyan);color:var(--cyan-soft);background:rgba(255,122,24,0.07);}
 
 .badge{
   display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
@@ -292,7 +502,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
    CARD / GLASS SURFACE
    ============================================================ */
 .glass{
-  background:linear-gradient(175deg,rgba(11,14,24,0.86),rgba(8,10,18,0.74));
+  background:linear-gradient(175deg,rgba(28,15,9,0.94),rgba(18,10,7,0.90));
   border:1px solid var(--border);border-radius:20px;
   backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);
   position:relative;
@@ -385,21 +595,32 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 .about-copy strong{color:var(--text-0);font-weight:600;}
 .timeline-mini{
   display:flex;flex-direction:column;gap:0;border-left:1px solid var(--border);padding:22px 22px 22px 30px;margin-top:8px;
-  background:linear-gradient(175deg,rgba(11,14,24,0.72),rgba(8,10,18,0.5));border-radius:0 16px 16px 0;
+  background:linear-gradient(175deg,rgba(28,15,9,0.72),rgba(18,10,7,0.5));border-radius:0 16px 16px 0;
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
 }
 .timeline-mini-item{position:relative;padding-bottom:26px;}
 .timeline-mini-item:last-child{padding-bottom:0;}
 .timeline-mini-item::before{
   content:'';position:absolute;left:-31.5px;top:3px;width:9px;height:9px;border-radius:50%;
-  background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 0 3px rgba(45,212,238,.12);
+  background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 0 3px rgba(255,122,24,.12);
 }
 .timeline-mini-item .t-label{font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;}
 .timeline-mini-item .t-title{font-size:14.5px;color:var(--text-0);font-weight:600;margin-top:3px;}
 
+.about-side{display:flex;flex-direction:column;gap:22px;}
+.about-photo-ring{
+  width:132px;height:132px;border-radius:50%;padding:3px;
+  background:var(--grad-brand);flex-shrink:0;
+}
+.about-photo-ring img{
+  display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;
+  border:3px solid var(--bg);
+}
+
 @media (max-width:980px){
   .pillars{grid-template-columns:repeat(2,minmax(0,1fr));}
   .about-grid{grid-template-columns:1fr;gap:36px;}
+  .about-photo-ring{width:96px;height:96px;}
 }
 @media (max-width:560px){
   .pillars{grid-template-columns:1fr;}
@@ -409,20 +630,21 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 <main id="main">
 
 <section id="hero" class="hero">
+
   <div class="container hero-inner">
-    <div class="eyebrow reveal is-visible">Portfolio — AI · ML · Industrial IoT · Robotics</div>
+    <div class="eyebrow reveal is-visible">Portfolio &mdash; Automotive Diagnostics &rarr; Industrial Robotics &amp; IIoT</div>
     <h1 class="hero-title reveal is-visible" style="--d:.05s">THARUN<br><span class="grad-text">SUBRAMANYA</span></h1>
-    <p class="hero-role reveal is-visible" style="--d:.15s">Applied Machine Learning for Industrial Systems &amp; Edge Robotics</p>
-    <p class="hero-sub reveal is-visible" style="--d:.22s">M.S. Artificial Intelligence, University of Michigan&ndash;Dearborn. Building sensor-driven ML systems for industrial diagnostics, edge predictive maintenance, and computer-vision perception &mdash; with a growing focus on robotics and physical AI.</p>
+    <p class="hero-role reveal is-visible" style="--d:.15s">Machine Learning Engineer for Industrial &amp; Automotive Systems</p>
+    <p class="hero-sub reveal is-visible" style="--d:.22s">M.S. Artificial Intelligence at the University of Michigan&ndash;Dearborn, built on an Industrial &amp; Production Engineering foundation. I build diagnostic systems that read vibration, thermal and bus signals and tell an engineer what a machine is about to do. The work so far is automotive: brakes, bearings, CAN networks. The goal is to carry that same edge diagnostics stack into <strong>industrial robotics and IIoT</strong>, where the machine is a manipulator on a plant floor.</p>
     <div class="hero-cta reveal is-visible" style="--d:.3s">
       <a href="#projects" class="btn btn-primary">View Projects <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="#contact" class="btn btn-ghost">Get in Touch</a>
     </div>
     <div class="hero-stats reveal is-visible" style="--d:.4s">
-      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Applied ML Systems</span></div>
-      <div class="stat"><span class="stat-num">88.4%</span><span class="stat-label">Data Reduction &mdash; DARE&#8209;PM</span></div>
-      <div class="stat"><span class="stat-num">95%</span><span class="stat-label">Detection mAP &mdash; ANPR</span></div>
+      <div class="stat"><span class="stat-num">6</span><span class="stat-label">Applied ML Systems</span></div>
+      <div class="stat"><span class="stat-num">88.4%</span><span class="stat-label">Edge Data Reduction, DARE&#8209;PM</span></div>
       <div class="stat"><span class="stat-num">3.8ms</span><span class="stat-label">Edge Inference Latency</span></div>
+      <div class="stat"><span class="stat-num">~5%</span><span class="stat-label">Torque Inversion Error</span></div>
     </div>
   </div>
   <div class="scroll-cue"><span></span>Scroll</div>
@@ -432,18 +654,24 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Summary</div>
-      <h2 class="section-title">Industrial engineering roots.<br><span class="grad-text">Applied AI focus.</span></h2>
+      <h2 class="section-title">Automotive diagnostics today.<br><span class="grad-text">Industrial robotics next.</span></h2>
     </div>
     <div class="about-grid">
       <div class="about-copy reveal">
-        <p>Industrial and Production Engineering background paired with a <strong>Master of Science in Artificial Intelligence</strong> from the University of Michigan&ndash;Dearborn. Applied machine learning work spans <strong>CAN&#8209;bus fault classification</strong>, <strong>vibration&#8209;based condition monitoring</strong>, <strong>drift&#8209;aware edge maintenance</strong>, and <strong>computer&#8209;vision perception pipelines</strong>.</p>
-        <p>Consistently grounded in data&#8209;quality validation and session&#8209;held&#8209;out evaluation rather than inflated benchmark numbers &mdash; reported metrics are revised downward whenever a higher figure cannot be defended. Currently extending that sensor&#8209;level diagnostic foundation toward <strong>robotics and physical AI systems</strong>.</p>
+        <p>A <strong>Bachelor of Engineering in Industrial &amp; Production Engineering</strong> paired with a <strong>Master of Science in Artificial Intelligence</strong> from the University of Michigan&ndash;Dearborn. The first taught tolerances, failure modes, and throughput; the second taught the models. The work sits where they meet: <strong>CAN&#8209;bus fault classification</strong>, <strong>vibration and thermal condition monitoring</strong>, <strong>drift&#8209;aware edge maintenance</strong>, and <strong>physics&#8209;based brake diagnostics</strong>.</p>
+        <p>Every result here is grounded in session&#8209;held&#8209;out evaluation rather than a favourable split, and reported figures are revised downward whenever a higher number cannot be defended.</p>
+        <p>The next step is deliberate rather than opportunistic. Predicting a bearing failure from vibration, arbitrating true drift from benign environmental shift, and running inference inside a millisecond budget on constrained hardware are not automotive problems. They are <strong>machine-health problems</strong>. A robot joint has a gearbox, a duty cycle, and a thermal signature, and a plant floor has the same telemetry backbone as a test vehicle. That is the bridge into <strong>industrial robotics and industrial IoT</strong> currently being built.</p>
       </div>
-      <div class="timeline-mini reveal" style="--d:.1s">
-        <div class="timeline-mini-item"><div class="t-label">2022</div><div class="t-title">B.E., Industrial &amp; Production Engineering</div></div>
-        <div class="timeline-mini-item"><div class="t-label">2024</div><div class="t-title">PG Certificate, AI Specialization</div></div>
-        <div class="timeline-mini-item"><div class="t-label">2026</div><div class="t-title">M.S., Artificial Intelligence</div></div>
-        <div class="timeline-mini-item"><div class="t-label">Now</div><div class="t-title">Edge AI &rarr; Robotics &amp; Physical AI</div></div>
+      <div class="about-side reveal" style="--d:.1s">
+        <div class="about-photo-ring">
+          <img src="assets/img/profile/tharun.webp" alt="Portrait of Tharun Subramanya" loading="lazy" width="132" height="132">
+        </div>
+        <div class="timeline-mini">
+          <div class="timeline-mini-item"><div class="t-label">2022</div><div class="t-title">B.E., Industrial &amp; Production Engineering</div></div>
+          <div class="timeline-mini-item"><div class="t-label">2024</div><div class="t-title">PG Certificate, AI Specialization</div></div>
+          <div class="timeline-mini-item"><div class="t-label">2026</div><div class="t-title">M.S., Artificial Intelligence</div></div>
+          <div class="timeline-mini-item"><div class="t-label">Now</div><div class="t-title">Automotive Diagnostics &rarr; Industrial Robotics &amp; IIoT</div></div>
+        </div>
       </div>
     </div>
 
@@ -456,7 +684,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       <div class="pillar glass reveal" style="--d:.12s">
         <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg></div>
         <h3>Industrial IoT</h3>
-        <p>Edge telemetry pipelines streaming sensor data through MQTT into InfluxDB and Grafana for real-time monitoring.</p>
+        <p>Raspberry&nbsp;Pi sensing through Mosquitto MQTT and AWS IoT Core into InfluxDB, Grafana and serverless alerting.</p>
       </div>
       <div class="pillar glass reveal" style="--d:.19s">
         <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
@@ -465,8 +693,8 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </div>
       <div class="pillar glass reveal" style="--d:.26s">
         <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><circle cx="12" cy="7" r="3"/><path d="M9 20v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M9 15h.01M15 15h.01"/></svg></div>
-        <h3>Robotics Foundation</h3>
-        <p>Mechatronics, control engineering, and robotics-lab coursework underpinning a move into physical AI.</p>
+        <h3>Robotics Transition</h3>
+        <p>Mechatronics, control engineering and robotics-lab training, now aimed at manipulator health and plant-floor telemetry.</p>
       </div>
     </div>
   </div>
@@ -527,13 +755,116 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
     <div class="section-head reveal">
       <div class="eyebrow">Projects</div>
       <h2 class="section-title">Systems that decode, monitor,<br><span class="grad-text">and diagnose.</span></h2>
-      <p class="section-lede">Four applied ML systems, most recent first &mdash; each grounded in measured, session-held-out evaluation.</p>
+      <p class="section-lede">Eight applied systems, most recent first. Each one is grounded in measured, held-out evaluation rather than a favourable split.</p>
     </div>
 
     <div class="projects-list">
 
       <article class="project-card glass reveal">
         <div class="project-index">01</div>
+        <div>
+          <div class="project-top">
+            <h3 class="project-title">Supply Chain Risk Data Pipeline</h3>
+            <span class="badge">Jul 2026</span>
+          </div>
+          <div class="project-sub">Late-Delivery Prediction Across 180K+ Orders</div>
+          <div class="project-tags">
+            <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">NumPy</span><span class="tag">scikit-learn</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Built an end-to-end predictive pipeline over <b>180,000+ supply-chain orders across 53 attributes</b>, covering cleaning, validation, preprocessing and model development.</li>
+            <li>Engineered shipment, temporal, operational and categorical features under <b>leakage-safe preprocessing</b> for late-delivery prediction.</li>
+            <li>Compressed one-hot dimensionality from <b>64,000+ features to 339</b> through high-cardinality feature optimisation and data-modelling decisions.</li>
+            <li>Raised late-risk recall from <b>57.5% to 78.8%</b> by tuning the decision threshold to 0.40 at 66.1% precision . That is a deliberate trade, since a missed late shipment costs more than a false alarm someone can dismiss.</li>
+          </ul>
+          <div class="project-metrics">
+            <div class="metric-chip"><b>64K → 339</b><span>Feature Compression</span></div>
+            <div class="metric-chip"><b>57.5 → 78.8%</b><span>Late-Risk Recall</span></div>
+            <div class="metric-chip"><b>180K+</b><span>Orders Processed</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card glass reveal">
+        <div class="project-index">02</div>
+        <div>
+          <div class="project-top">
+            <h3 class="project-title">Automated ML Pipeline &amp; Model Recommendation Platform</h3>
+            <span class="badge">Dec 2025</span>
+          </div>
+          <div class="project-sub">Profiling, Task Inference &amp; Model Selection as a Service</div>
+          <div class="project-tags">
+            <span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">Flask</span>
+            <span class="tag">pandas</span><span class="tag">Plotly</span><span class="tag">REST API</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Built a reusable ML platform ingesting <b>CSV, Excel, JSON and Parquet</b> datasets with automated profiling, target detection and task inference.</li>
+            <li>Automated preprocessing for imputation, scaling, categorical encoding, class imbalance and sparse data through composed scikit-learn pipelines.</li>
+            <li>Implemented model recommendation and training across <b>classification, regression, clustering and time-series</b> workflows.</li>
+            <li>Evaluated with ROC-AUC, F1, MAE, R&sup2; and silhouette score, and exposed Flask REST APIs for model comparison, persistence and prediction.</li>
+          </ul>
+          <div class="project-metrics">
+            <div class="metric-chip"><b>4</b><span>Input Formats</span></div>
+            <div class="metric-chip"><b>4</b><span>Task Families</span></div>
+            <div class="metric-chip"><b>REST</b><span>Compare · Persist · Predict</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card glass reveal">
+        <div class="project-index">03</div>
+        <div>
+          <div class="project-top">
+            <h3 class="project-title">Smart Brake &amp; Wheel-End Condition Monitor</h3>
+            <span class="badge badge-live">In Progress</span>
+          </div>
+          <div class="project-sub">Physics-First Brake Diagnostics &mdash; Thermal Simulation &amp; Torque Inversion</div>
+          <div class="project-tags">
+            <span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">scikit-learn</span>
+            <span class="tag">pytest</span><span class="tag">ruff</span><span class="tag">GitHub Actions</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Modelled rotor thermal behaviour with a <b>lumped-capacitance simulator</b> incorporating speed-dependent convection and radiation, then injected residual caliper drag torque across four severity levels over a dual-wheel front-left and front-right configuration.</li>
+            <li>Devised a <b>Newtonian cooling-curve feature extractor</b> that inverts drag torque from the cooling asymptote rather than classifying a black-box signature. It recovers torque within roughly <b>5% of ground truth</b> on severe-drag cases.</li>
+            <li>Chose physical inversion over classification deliberately: an interpretable torque estimate carries a diagnostic story to a service engineer that a classifier confidence score cannot.</li>
+            <li>Guarded the simulator with an <b>18-test suite</b> gated in continuous integration through ruff, pytest and coverage reporting. Built with a collaborator: the thermal, drag-injection and inversion work is mine.</li>
+          </ul>
+          <div class="project-metrics">
+            <div class="metric-chip"><b>~5%</b><span>Torque Inversion Error</span></div>
+            <div class="metric-chip"><b>4</b><span>Drag Severity Levels</span></div>
+            <div class="metric-chip"><b>18</b><span>CI-Gated Tests</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card glass reveal">
+        <div class="project-index">04</div>
+        <div>
+          <div class="project-top">
+            <h3 class="project-title">Edge Sensing Pipeline &amp; Serverless Digital Twin</h3>
+            <span class="badge">2025</span>
+          </div>
+          <div class="project-sub">Raspberry Pi Telemetry &rarr; MQTT &rarr; Cloud Alerting on Physical Hardware</div>
+          <div class="project-tags">
+            <span class="tag">Raspberry Pi 5</span><span class="tag">MQTT</span><span class="tag">Mosquitto</span><span class="tag">Apache Airflow</span><span class="tag">Mosquitto</span>
+            <span class="tag">AWS IoT Core</span><span class="tag">Lambda</span><span class="tag">SES</span><span class="tag">Python</span>
+          </div>
+          <ul class="project-bullets">
+            <li>Assembled an end-to-end telemetry chain on <b>physical Raspberry Pi hardware</b>. DHT sensors publish over a Mosquitto MQTT broker to a Python subscriber, persisted to storage and visualised for trend inspection.</li>
+            <li>Extended the pipeline into a <b>serverless digital twin</b> on AWS IoT Core, routing threshold breaches through Lambda to SES email alerting.</li>
+            <li>Validated each layer independently  (sensor, broker, subscriber, storage, alert) before end-to-end testing, after learning that a straight-to-integration approach doubles the time spent locating which link broke.</li>
+            <li>Diagnosed the failure modes that only appear on real hardware: silent cross-service region mismatches, certificate filename drift in authentication scripts, and a unit-conversion error that tripped every threshold while passing casual tests.</li>
+          </ul>
+          <div class="project-metrics">
+            <div class="metric-chip"><b>5</b><span>Independently Validated Layers</span></div>
+            <div class="metric-chip"><b>Physical</b><span>Hardware Deployment</span></div>
+            <div class="metric-chip"><b>Serverless</b><span>Cloud Alerting Path</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card glass reveal">
+        <div class="project-index">05</div>
         <div>
           <div class="project-top">
             <h3 class="project-title">CANalyse Edge</h3>
@@ -559,22 +890,22 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </article>
 
       <article class="project-card glass reveal">
-        <div class="project-index">02</div>
+        <div class="project-index">06</div>
         <div>
           <div class="project-top">
             <h3 class="project-title">DARE-PM</h3>
             <span class="badge badge-date">Apr 2026</span>
           </div>
-          <div class="project-sub">Drift-Aware Edge Predictive Maintenance with Out-of-Distribution Monitoring</div>
+          <div class="project-sub">Drift-Aware Edge Predictive Maintenance &mdash; Vehicle Buzz/Squeak/Rattle Detection</div>
           <div class="project-tags">
             <span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">One-Class SVM</span>
-            <span class="tag">ADWIN</span><span class="tag">MQTT</span><span class="tag">Docker</span><span class="tag">InfluxDB</span><span class="tag">Grafana</span>
+            <span class="tag">ADWIN</span><span class="tag">MQTT</span><span class="tag">Docker</span><span class="tag">InfluxDB</span><span class="tag">Grafana</span><span class="tag">Plotly</span>
           </div>
           <ul class="project-bullets">
             <li>Constructed an <b>edge predictive-maintenance system</b> extracting 14 time- and frequency-domain features every 0.1 seconds from vibration and acoustic streams on-device.</li>
-            <li>Applied <b>One-Class SVM</b> novelty detection &mdash; an OOD detector fitted on nominal data alone &mdash; with <b>ADWIN</b> concept-drift diagnosis separating true distribution shift from benign environmental variation to prevent needless retraining.</li>
-            <li>Cut false model adaptations from 49.87% to under 1% while sustaining F1 up to 0.80 &mdash; the false-alarm failure mode of naive drift detectors.</li>
-            <li>Reached 88.4% data reduction and 3.8 ms inference latency; deployed containerized <b>Docker</b> and <b>MQTT</b> services with continuous performance monitoring through InfluxDB and Grafana, validated across 48 controlled experiments.</li>
+            <li>Applied <b>One-Class SVM</b> novelty detection, an out-of-distribution detector fitted on nominal data alone, with <b>ADWIN</b> concept-drift diagnosis separating true distribution shift from benign environmental variation to prevent needless retraining.</li>
+            <li>Cut false model adaptations from 49.87% to under 1% while sustaining F1 up to 0.80, reaching <b>88.4% data reduction</b> and <b>3.8 ms inference latency</b> across 48 controlled experiments.</li>
+            <li>Reframed under faculty mentorship toward <b>vehicle buzz/squeak/rattle detection</b>, extending single-detector drift into a multi-signal arbitration layer of per-feature ADWIN, rolling confidence and cross-sensor majority voting. The reason is that ADWIN alone cannot distinguish a real fault from an environmental shift before the signal reaches the controller.</li>
           </ul>
           <div class="project-metrics">
             <div class="metric-chip"><b>88.4%</b><span>Data Reduction</span></div>
@@ -586,7 +917,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </article>
 
       <article class="project-card glass reveal">
-        <div class="project-index">03</div>
+        <div class="project-index">07</div>
         <div>
           <div class="project-top">
             <h3 class="project-title">Vehicle Type &amp; Speed Pattern Recognition</h3>
@@ -598,7 +929,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
           </div>
           <ul class="project-bullets">
             <li>Built a <b>traffic-video perception pipeline</b> for vehicle detection, tracking, 4-class classification, and calibrated speed estimation.</li>
-            <li>Trained CNNs on <b>17,760 labeled vehicle crops</b> under a group-level split by video, so no same-vehicle frames were shared across training and validation &mdash; reaching approximately 85% binary and above 79% multi-class validation accuracy.</li>
+            <li>Trained CNNs on <b>17,760 labeled vehicle crops</b> under a group-level split by video, so no same-vehicle frames were shared across training and validation, reaching approximately 85% binary and above 79% multi-class validation accuracy.</li>
             <li>Implemented <b>MOG2 background subtraction</b>, contour filtering, centroid tracking, and multi-frame voting to stabilize identities, then estimated speed from centroid displacement, frame rate, and lane-width calibration.</li>
           </ul>
           <div class="project-metrics">
@@ -610,7 +941,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </article>
 
       <article class="project-card glass reveal">
-        <div class="project-index">04</div>
+        <div class="project-index">08</div>
         <div>
           <div class="project-top">
             <h3 class="project-title">Automatic Number Plate Recognition</h3>
@@ -623,7 +954,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
           <ul class="project-bullets">
             <li>Curated <b>12,000+ annotated images</b> from the OpenALPR Benchmark and Kaggle, generating perturbed variants through rotation, brightness/contrast shifts, and synthetic occlusion to test detection robustness under degraded imaging.</li>
             <li>Fine-tuned <b>YOLOv5</b> for plate detection, reaching 95% mAP, then assembled an OCR stage from OpenCV preprocessing, a Keras CNN character segmenter with pytesseract, and regular-expression correction.</li>
-            <li>Containerized detection and OCR in Docker and deployed a <b>Flask service on AWS EC2</b> through CI/CD, sustaining inference under 50 ms per image at 89% end-to-end accuracy &mdash; cutting manual logging by 85%.</li>
+            <li>Containerized detection and OCR in Docker and deployed a <b>Flask service on AWS EC2</b> through CI/CD, sustaining inference under 50 ms per image at 89% end-to-end accuracy, cutting manual logging by 85%.</li>
           </ul>
           <div class="project-metrics">
             <div class="metric-chip"><b>95%</b><span>Detection mAP</span></div>
@@ -759,7 +1090,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </div>
       <div class="skill-group glass reveal" style="--d:.2s">
         <div class="skill-group-title">Cloud &amp; Databases</div>
-        <div class="skill-chips"><span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">InfluxDB</span></div>
+        <div class="skill-chips"><span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">AWS IoT Core</span><span class="tag">Lambda</span><span class="tag">SES</span><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">InfluxDB</span></div>
       </div>
       <div class="skill-group glass reveal" style="--d:.25s">
         <div class="skill-group-title">Visualization Tools</div>
@@ -767,7 +1098,7 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
       </div>
       <div class="skill-group glass reveal" style="--d:.3s">
         <div class="skill-group-title">DevOps &amp; Development Tools</div>
-        <div class="skill-chips"><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">Git</span><span class="tag">Flask</span><span class="tag">REST APIs</span></div>
+        <div class="skill-chips"><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">Git</span><span class="tag">Flask</span><span class="tag">REST APIs</span><span class="tag">Raspberry Pi 5</span><span class="tag">ruff</span></div>
       </div>
     </div>
   </div>
@@ -781,13 +1112,27 @@ body.no-fine-pointer #cursor-dot,body.no-fine-pointer #cursor-ring{display:none;
 .ach-top{display:flex;align-items:center;gap:16px;}
 .ach-trophy{
   width:54px;height:54px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,rgba(251,191,109,.18),rgba(167,139,250,.12));border:1px solid var(--border-hi);color:var(--amber);
+  background:linear-gradient(145deg,rgba(251,191,109,.18),rgba(236,30,98,.12));border:1px solid var(--border-hi);color:var(--amber);
 }
 .ach-trophy svg{width:26px;height:26px;}
 .ach-title{font-size:19px;color:var(--text-0);}
 .ach-place{font-family:var(--font-mono);font-size:13px;color:var(--amber);margin-top:3px;}
 .ach-body{font-size:14.5px;color:var(--text-1);line-height:1.65;}
 .ach-body b{color:var(--text-0);}
+.ach-gallery{display:grid;grid-template-columns:.62fr 1fr;gap:12px;}
+.ach-photo{
+  position:relative;display:block;border-radius:14px;overflow:hidden;
+  border:1px solid var(--border);background:rgba(255,255,255,0.02);
+  transition:transform .3s var(--ease-out),border-color .3s var(--ease-out);
+}
+.ach-photo:hover{transform:translateY(-2px);border-color:var(--border-hi);}
+.ach-photo img{display:block;width:100%;height:150px;object-fit:cover;}
+.ach-photo img.ach-photo-faces{object-position:center 8%;}
+.ach-photo-cap{
+  position:absolute;left:0;right:0;bottom:0;padding:7px 10px 6px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--text-0);
+  background:linear-gradient(0deg,rgba(10,5,3,.92),rgba(10,5,3,0));
+}
 .ach-metrics{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:6px;}
 
 .cert-card{padding:34px 32px;display:flex;flex-direction:column;gap:14px;}
@@ -861,7 +1206,17 @@ footer{position:relative;border-top:1px solid var(--border);padding:38px 0;}
             <div class="ach-place">3rd Place &middot; Wayne State University &amp; TechTown Detroit &middot; Mar 2026</div>
           </div>
         </div>
-        <p class="ach-body">Aligned a <b>3-person cross-functional team</b> from Computer Science and Robotics under a 24-hour constraint, then owned the model pipeline: a <b>9-feature Random Forest</b> over Wi-Fi channel state information served through FastAPI and WebSockets &mdash; placing 3rd of 30+ teams.</p>
+        <p class="ach-body">Aligned a <b>3-person cross-functional team</b> from Computer Science and Robotics under a 24-hour constraint, then owned the model pipeline: a <b>9-feature Random Forest</b> over Wi-Fi channel state information served through FastAPI and WebSockets, placing 3rd of 30+ teams.</p>
+        <div class="ach-gallery">
+          <a class="ach-photo" href="assets/img/wayhehacks/team-3rd-place.webp" target="_blank" rel="noopener noreferrer">
+            <img class="ach-photo-faces" src="assets/img/wayhehacks/team-3rd-place.webp" alt="Tharun and two teammates holding 3rd place certificates at WayneHacks 4" loading="lazy" width="480" height="903">
+            <span class="ach-photo-cap">Team &middot; 3rd place</span>
+          </a>
+          <a class="ach-photo" href="assets/img/wayhehacks/guardwave-prototype.webp" target="_blank" rel="noopener noreferrer">
+            <img src="assets/img/wayhehacks/guardwave-prototype.webp" alt="Early GuardWave hardware iteration: a PIR motion sensor wired to a microcontroller on a breadboard" loading="lazy" width="1280" height="720">
+            <span class="ach-photo-cap">Early sensor prototype</span>
+          </a>
+        </div>
         <div class="ach-metrics">
           <div class="metric-chip"><b>75.6%</b><span>Accuracy</span></div>
           <div class="metric-chip"><b>77.8%</b><span>Fall Recall</span></div>
@@ -885,7 +1240,7 @@ footer{position:relative;border-top:1px solid var(--border);padding:38px 0;}
     <div class="section-head reveal">
       <div class="eyebrow">Contact</div>
       <h2 class="section-title">Open to roles in <span class="grad-text">applied AI, IoT &amp; robotics.</span></h2>
-      <p class="section-lede" style="margin-inline:auto;">Machine learning, industrial IoT, edge AI, and robotics &mdash; reach out directly below.</p>
+      <p class="section-lede" style="margin-inline:auto;">Machine learning, industrial IoT, edge AI and robotics. Reach out directly below.</p>
     </div>
 
     <div class="contact-methods">
@@ -1148,8 +1503,8 @@ window.addEventListener('mousemove', function(e){
   }
 
   var small = isSmallScreen();
-  var COLOR_CYAN = 0x2dd4ee;
-  var COLOR_VIOLET = 0xa78bfa;
+  var COLOR_CYAN = 0xff7a18;
+  var COLOR_VIOLET = 0xec1e62;
 
   var renderer;
   try {
@@ -1203,6 +1558,7 @@ window.addEventListener('mousemove', function(e){
 
   /* ---------- AI core ---------- */
   var coreGroup = new THREE.Group();
+  coreGroup.visible = false; // superseded by the hero SVG adaptation wheel
   scene.add(coreGroup);
 
   var coreInner = new THREE.Mesh(
@@ -1293,7 +1649,9 @@ window.addEventListener('mousemove', function(e){
       pos[k*3+2] = r * Math.cos(phi);
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    var mat = new THREE.PointsMaterial({ color: 0xffffff, size: size, transparent: true, opacity: opacity, sizeAttenuation: true });
+    var mat = new THREE.PointsMaterial({ color: 0xffd9b0, size: size, map: glowTex,
+      transparent: true, opacity: opacity, sizeAttenuation: true,
+      blending: THREE.AdditiveBlending, depthWrite: false });
     return new THREE.Points(geo, mat);
   }
   var starsFar = buildStars(small ? 900 : 1900, 42, 0.06, 0.55);
@@ -1352,7 +1710,11 @@ window.addEventListener('mousemove', function(e){
 
     return { group: group, shoulderPivot: shoulderPivot, elbowPivot: elbowPivot, wristPivot: wristPivot };
   }
+  // The hero SVG owns the robotic arm now. The WebGL arm is kept in the
+  // scene graph (the animation loop still drives it) but not rendered,
+  // so the page shows one arm rather than two competing ones.
   var arm = buildArm();
+  arm.group.visible = false;
   scene.add(arm.group);
 
   /* ---------- IoT radar ping rings ---------- */
@@ -1485,6 +1847,20 @@ window.addEventListener('mousemove', function(e){
   rafId = requestAnimationFrame(animate);
 })();
 
+})();
+</script>
+
+<!-- Portfolio RAG chatbot: retrieval + guardrails, runs in the browser. -->
+<script src="./assets/corpus.js"></script>
+<script src="./assets/chatbot.js" defer>
+/* The wallpaper is bright behind the hero and steps back once the reader is
+   into the content, so nothing competes with body copy further down. */
+(function heroWatch(){
+  var hero = document.getElementById('hero');
+  if (!hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function(entries){
+    document.body.classList.toggle('past-hero', !entries[0].isIntersecting);
+  }, { rootMargin: '-45% 0px 0px 0px' }).observe(hero);
 })();
 </script>
 </body>
