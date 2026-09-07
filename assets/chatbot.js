@@ -153,6 +153,12 @@
     masters: ['master', 'science', 'msc'],
     bachelors: ['bachelor', 'engineering'],
     degree: ['master', 'bachelor', 'education', 'university'],
+    // "Educational qualifications/qualities" is common recruiter phrasing that
+    // shares zero stemmed tokens with the corpus's "education" — without this,
+    // the query's only real signal is generic words like "quality", which
+    // match unrelated data-quality mentions elsewhere and win by accident.
+    educational: ['education', 'academic', 'degree', 'qualification'],
+    qualification: ['education', 'degree', 'academic'],
     resume: ['profile', 'experience', 'background'],
     cv_doc: ['profile', 'experience'],
     job: ['role', 'position'],

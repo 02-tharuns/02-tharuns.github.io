@@ -3,3 +3,12 @@ __pycache__/
 .venv/
 shot.mjs
 package-lock.json
+
+# v2 (frontend/, backend/) — each also has its own .gitignore
+frontend/dist/
+backend/data/*.db
+backend/data/*.db-journal
+!backend/data/.gitkeep
+backend/.env
+.env.local
+.env.production

@@ -1,0 +1,506 @@
+{
+  "generatedAt": "2026-09-06T18:56:21.089Z",
+  "documents": [
+    {
+      "id": "profile",
+      "section": "about",
+      "title": "Profile and positioning",
+      "type": "profile",
+      "domain": "",
+      "date": "2026-08",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Who Tharun Subramanya is",
+          "text": "Tharun Subramanya is an applied machine learning engineer working on industrial systems, edge IoT, and robotics. He holds a Master of Science in Artificial Intelligence from the University of Michigan-Dearborn, completed in May 2026 with a GPA of 3.74 out of 4.00. His background combines Industrial and Production Engineering with applied AI."
+        },
+        {
+          "heading": "What he works on",
+          "text": "His applied machine learning work spans CAN-bus fault classification, vibration-based condition monitoring, drift-aware edge predictive maintenance, and computer-vision perception pipelines. He is currently extending that sensor-level diagnostic foundation toward robotics and physical AI systems."
+        },
+        {
+          "heading": "How he approaches evaluation",
+          "text": "His work is consistently grounded in data-quality validation and session-held-out evaluation rather than inflated benchmark numbers. Reported metrics are revised downward whenever a higher figure cannot be defended. Splits are held out by recording session, by video, or by group so that neighbouring samples never leak across an evaluation boundary."
+        },
+        {
+          "heading": "Career direction",
+          "text": "He is moving from sensor and time-series machine learning toward robotics and robot learning. The bridge is data quality: deciding automatically which sensor data, or which demonstration, is trustworthy enough to train on. He is open to roles in applied AI, industrial IoT, edge AI, and robotics."
+        },
+        {
+          "heading": "Career timeline",
+          "text": "2022: Bachelor of Engineering in Industrial and Production Engineering. 2024: Post Graduate Certificate in AI Specialization. 2026: Master of Science in Artificial Intelligence. Now: moving from edge AI toward robotics and physical AI."
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "section": "education",
+      "title": "Education and coursework",
+      "type": "credential",
+      "domain": "ai",
+      "date": "2026-05",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Master of Science in Artificial Intelligence",
+          "text": "University of Michigan-Dearborn, completed May 2026. GPA 3.74 out of 4.00. Relevant coursework: Deep Learning, Pattern Recognition and Neural Networks, Edge Computing, Automotive Sensors and Actuators."
+        },
+        {
+          "heading": "Post Graduate Certificate in AI Specialization",
+          "text": "Vellore Institute of Technology, completed June 2024. CGPA 8.46 out of 10. Relevant coursework: Statistics and Probability, Python for Data Analytics, Big Data Analytics, Cloud Computing."
+        },
+        {
+          "heading": "Bachelor of Engineering in Industrial and Production Engineering",
+          "text": "The National Institute of Engineering, completed September 2022. CGPA 7.45 out of 10. Relevant coursework: Statistical Quality Control, Metrology and Measurements, Control Engineering, Mechatronics, Robotics Laboratory."
+        },
+        {
+          "heading": "Why the industrial engineering degree matters",
+          "text": "The Industrial and Production Engineering degree supplies manufacturing process knowledge that a pure computer science background does not: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and robotics laboratory work. It means he understands a fabrication or production floor as an engineer rather than as a visitor, which is directly relevant to industrial robotics, manufacturing quality engineering, and digital-twin modelling of facilities."
+        }
+      ]
+    },
+    {
+      "id": "canalyse",
+      "section": "projects",
+      "title": "CANalyse Edge",
+      "type": "project",
+      "domain": "automotive",
+      "date": "2026-08",
+      "repo": "https://github.com/02-tharuns/CANalyse-Edge",
+      "status": "In progress",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "CANalyse Edge overview",
+          "text": "CANalyse Edge is a CAN signal decoding and diagnostic validation service, currently in progress. Stack: Python, python-can, cantools, scikit-learn, FastAPI, pytest, GitHub Actions."
+        },
+        {
+          "heading": "CANalyse Edge decoding pipeline",
+          "text": "Engineered a CAN and CAN-FD diagnostic pipeline decoding raw frames into named engineering signals through DBC mapping. Records timing, DLC, and signal-range checks as data-quality evidence on every validation run."
+        },
+        {
+          "heading": "CANalyse Edge model and evaluation",
+          "text": "Derived rolling signal-window features feeding a Random Forest component-condition model. Held out 3 unseen recording sessions of 6, so neighbouring windows never leak across the evaluation split. This session-level holdout is the point: random splits on windowed sensor data leak, and the resulting accuracy is fiction."
+        },
+        {
+          "heading": "CANalyse Edge diagnostic API",
+          "text": "Exposed results through a SOVD-inspired FastAPI service serving entity, component-health, fault, data, and operation resources, with a dashboard supporting issue triage and root-cause inspection."
+        },
+        {
+          "heading": "CANalyse Edge testing and datasets",
+          "text": "Automated a pytest regression suite in continuous integration. Curated a public dataset registry covering ReCAN, ROAD, Scania Component X, and Q-Motion, under a validation protocol that reports simulator output as synthetic smoke tests rather than as real results."
+        }
+      ]
+    },
+    {
+      "id": "darepm",
+      "section": "projects",
+      "title": "DARE-PM",
+      "type": "project",
+      "domain": "automotive, industrial",
+      "date": "2026-04",
+      "repo": "https://github.com/02-tharuns/dare-pm",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "DARE-PM overview",
+          "text": "DARE-PM is drift-aware edge predictive maintenance with out-of-distribution monitoring, completed April 2026. Stack: Python, scikit-learn, One-Class SVM, ADWIN, MQTT, Docker, InfluxDB, Grafana. Built as coursework for CIS 489 Edge Computing at the University of Michigan-Dearborn."
+        },
+        {
+          "heading": "DARE-PM feature extraction",
+          "text": "Constructed an edge predictive-maintenance system extracting 14 time-domain and frequency-domain features every 0.1 seconds from vibration and acoustic streams, on-device."
+        },
+        {
+          "heading": "DARE-PM drift detection",
+          "text": "Applied One-Class SVM novelty detection, an out-of-distribution detector fitted on nominal data alone, combined with ADWIN concept-drift diagnosis. The ADWIN stage separates true distribution shift from benign environmental variation, which prevents needless retraining."
+        },
+        {
+          "heading": "DARE-PM results",
+          "text": "Cut false model adaptations from 49.87 percent to under 1 percent while sustaining F1 up to 0.80. That false-alarm rate is the characteristic failure mode of naive drift detectors. Reached 88.4 percent data reduction and 3.8 millisecond inference latency, validated across 48 controlled experiments."
+        },
+        {
+          "heading": "DARE-PM deployment",
+          "text": "Deployed containerized Docker and MQTT services with continuous performance monitoring through InfluxDB and Grafana."
+        },
+        {
+          "heading": "DARE-PM buzz squeak and rattle reframe",
+          "text": "Reframed under faculty mentorship toward vehicle buzz, squeak and rattle detection. The extension replaces single-detector drift with a multi-signal arbitration layer: per-feature ADWIN, rolling confidence, and cross-sensor majority voting. The reason is that ADWIN alone cannot distinguish a genuine fault from a benign environmental shift, so a second signal is needed to arbitrate before anything reaches the controller."
+        }
+      ]
+    },
+    {
+      "id": "vehicle",
+      "section": "projects",
+      "title": "Vehicle Type and Speed Pattern Recognition",
+      "type": "project",
+      "domain": "automotive",
+      "date": "2025-04",
+      "repo": "https://github.com/02-tharuns/Vehicle_Type_and_Speed_Pattern-Recognition",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Vehicle Type and Speed Pattern Recognition overview",
+          "text": "A traffic perception pipeline for vehicle detection, tracking, four-class classification, and calibrated speed estimation, completed April 2025. Stack: Python, OpenCV, TensorFlow and Keras, convolutional neural networks."
+        },
+        {
+          "heading": "Vehicle recognition training and split",
+          "text": "Trained convolutional neural networks on 17,760 labelled vehicle crops under a group-level split by video, so that no same-vehicle frames were shared across training and validation. Reached approximately 85 percent binary accuracy and above 79 percent multi-class validation accuracy."
+        },
+        {
+          "heading": "Vehicle tracking and speed estimation",
+          "text": "Implemented MOG2 background subtraction, contour filtering, centroid tracking, and multi-frame voting to stabilize vehicle identities. Estimated speed from centroid displacement, frame rate, and lane-width calibration."
+        }
+      ]
+    },
+    {
+      "id": "anpr",
+      "section": "projects",
+      "title": "Automatic Number Plate Recognition",
+      "type": "project",
+      "domain": "automotive",
+      "date": "2024-03",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Automatic Number Plate Recognition overview",
+          "text": "A perception pipeline and robustness testing project for automatic number plate recognition, completed March 2024. Stack: YOLOv5, PyTorch, OpenCV, Tesseract, Albumentations, Docker, AWS EC2."
+        },
+        {
+          "heading": "ANPR dataset and robustness testing",
+          "text": "Curated more than 12,000 annotated images from the OpenALPR Benchmark and Kaggle. Generated perturbed variants through rotation, brightness and contrast shifts, and synthetic occlusion, to test detection robustness under degraded imaging conditions."
+        },
+        {
+          "heading": "ANPR detection and OCR",
+          "text": "Fine-tuned YOLOv5 for plate detection, reaching 95 percent mAP. Assembled an OCR stage from OpenCV preprocessing, a Keras convolutional character segmenter with pytesseract, and regular-expression correction."
+        },
+        {
+          "heading": "ANPR deployment and results",
+          "text": "Containerized detection and OCR in Docker and deployed a Flask service on AWS EC2 through a CI/CD pipeline. Sustained inference under 50 milliseconds per image at 89 percent end-to-end accuracy, cutting manual logging effort by 85 percent."
+        }
+      ]
+    },
+    {
+      "id": "brake",
+      "section": "projects",
+      "title": "Smart Brake and Wheel-End Condition Monitor",
+      "type": "project",
+      "domain": "automotive",
+      "date": "2026-08",
+      "repo": "",
+      "status": "In progress",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Smart Brake and Wheel-End Condition Monitor overview",
+          "text": "A physics-first brake and wheel-end diagnostic system, currently in progress, built with a collaborator. Stack: Python, NumPy, scikit-learn, pytest, ruff, GitHub Actions. Tharun owns the thermal simulation, drag-torque injection and torque-inversion work."
+        },
+        {
+          "heading": "Brake rotor thermal simulation",
+          "text": "Modelled rotor thermal behaviour with a lumped-capacitance simulator incorporating speed-dependent convection and radiation. Injected residual caliper drag torque across four severity levels, over a dual-wheel front-left and front-right configuration."
+        },
+        {
+          "heading": "Brake torque inversion from cooling curves",
+          "text": "Devised a Newtonian cooling-curve feature extractor that inverts drag torque from the cooling asymptote rather than classifying a black-box signature. Recovers torque within roughly 5 percent of ground truth on severe-drag cases. Physical inversion was chosen over classification deliberately: an interpretable torque estimate carries a diagnostic story to a service engineer that a classifier confidence score cannot."
+        },
+        {
+          "heading": "Brake project testing",
+          "text": "Guarded by an 18-test suite gated in continuous integration through ruff, pytest and coverage reporting."
+        }
+      ]
+    },
+    {
+      "id": "iottwin",
+      "section": "projects",
+      "title": "Edge Sensing Pipeline and Serverless Digital Twin",
+      "type": "project",
+      "domain": "industrial",
+      "date": "2025-12",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Edge sensing pipeline overview",
+          "text": "An end-to-end telemetry chain running on physical Raspberry Pi hardware. DHT sensors publish over a Mosquitto MQTT broker to a Python subscriber, are persisted to storage, and are visualised for trend inspection."
+        },
+        {
+          "heading": "Serverless digital twin and alerting",
+          "text": "Extended the pipeline into a serverless digital twin on AWS IoT Core, routing threshold breaches through Lambda to SES email alerting, running against real hardware rather than a simulator."
+        },
+        {
+          "heading": "Lessons from deploying on real hardware",
+          "text": "Each layer was validated independently, sensor to broker to subscriber to storage to alert, before end-to-end testing, because going straight to integration doubles the time spent locating which link broke. Real failure modes encountered: silent region mismatches between IoT Core, Lambda and SES; certificate filename drift in authentication scripts; and a unit-conversion error that tripped every threshold while passing casual tests."
+        }
+      ]
+    },
+    {
+      "id": "supplychain",
+      "section": "projects",
+      "title": "Supply Chain Risk Data Pipeline and Predictive Analytics",
+      "type": "project",
+      "domain": "data-science, industrial",
+      "date": "2026-07",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Supply chain risk pipeline overview",
+          "text": "An end-to-end predictive pipeline over more than 180,000 supply-chain orders across 53 attributes, built May to July 2026. Covers data cleaning, validation, preprocessing and model development. Stack: Python, pandas, NumPy, scikit-learn."
+        },
+        {
+          "heading": "Supply chain feature engineering",
+          "text": "Engineered shipment, temporal, operational and categorical features using leakage-safe preprocessing for late-delivery prediction. Reduced one-hot encoded dimensionality from over 64,000 features to 339 through high-cardinality feature optimisation and data-modelling decisions."
+        },
+        {
+          "heading": "Supply chain evaluation and threshold tuning",
+          "text": "Evaluated precision, recall, F1 and ROC-AUC. Raised late-risk recall from 57.5 percent to 78.8 percent through decision-threshold tuning, settling on a threshold of 0.40 at a precision of 66.1 percent using logistic regression. The trade is deliberate: for a late-delivery warning, a missed late shipment costs more than a false alarm someone can dismiss."
+        }
+      ]
+    },
+    {
+      "id": "automl",
+      "section": "projects",
+      "title": "Automated ML Pipeline and Model Recommendation Platform",
+      "type": "project",
+      "domain": "ai, data-science",
+      "date": "2025-12",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Automated ML platform overview",
+          "text": "A reusable machine learning platform accepting CSV, Excel, JSON and Parquet datasets, built September to December 2025, with automated profiling, target detection and task inference. Stack: Python, scikit-learn, Flask, pandas, Plotly, REST APIs."
+        },
+        {
+          "heading": "Automated preprocessing",
+          "text": "Automated preprocessing for imputation, scaling, categorical encoding, class imbalance and sparse data using scikit-learn pipelines."
+        },
+        {
+          "heading": "Model recommendation and evaluation",
+          "text": "Implemented model recommendation and training across classification, regression, clustering and time-series workflows. Evaluated using ROC-AUC, F1, MAE, R-squared and silhouette score. Exposed Flask REST APIs for model comparison, persistence and prediction."
+        }
+      ]
+    },
+    {
+      "id": "usedcar",
+      "section": "projects",
+      "title": "Forecasting Used Car Prices with Predictive Models",
+      "type": "project",
+      "domain": "data-science",
+      "date": "2024-01",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Used car price forecasting overview",
+          "text": "A price forecasting project over 30,000 Kaggle used-car listings, built November 2023 to January 2024. Earlier applied machine learning work, predating the sensor and edge focus."
+        },
+        {
+          "heading": "Used car modelling and results",
+          "text": "Raised R-squared from 0.68 to 0.80 and cut mean absolute error by 12 percent using stacked regression over Random Forest, gradient boosting and XGBoost. Engineered predictive features including vehicle age, mileage per year and fuel type."
+        },
+        {
+          "heading": "Used car pipeline and delivery",
+          "text": "Built modular scikit-learn pipelines for preprocessing, feature engineering and model training. Delivered interactive dashboards to 8 stakeholders to support pricing decisions."
+        }
+      ]
+    },
+    {
+      "id": "fraud",
+      "section": "projects",
+      "title": "Credit Card Fraud Prediction",
+      "type": "project",
+      "domain": "data-science",
+      "date": "2023-10",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Credit card fraud detection overview",
+          "text": "A fraud classification project over 284,000 transactions with a 0.17 percent fraud rate, built August to October 2023. Earlier applied machine learning work, predating the sensor and edge focus."
+        },
+        {
+          "heading": "Fraud detection modelling",
+          "text": "Optimised XGBoost with Bayesian hyperparameter tuning, reaching 97 percent precision at 89 percent recall. Applied SMOTE balancing to lift minority-class recall by 20 percent without degrading precision. Benchmarked against logistic regression, Random Forest and a multilayer perceptron, which validated XGBoost as the strongest model on this data."
+        },
+        {
+          "heading": "Fraud detection deployment and impact",
+          "text": "Deployed the model as a Dockerised Flask API serving predictions under 200 milliseconds in a test environment. The associated 1.2 million dollar annual loss figure is a simulated estimate from the dataset, not a measured business outcome."
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "section": "skills",
+      "title": "Technical skills",
+      "type": "skills",
+      "domain": "",
+      "date": "2026-08",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Programming languages",
+          "text": "Python, SQL, R."
+        },
+        {
+          "heading": "Machine learning frameworks",
+          "text": "scikit-learn, TensorFlow and Keras, PyTorch, XGBoost, NLTK, pandas, NumPy, OpenCV."
+        },
+        {
+          "heading": "AI frameworks",
+          "text": "Hugging Face Transformers, LangChain, LlamaIndex."
+        },
+        {
+          "heading": "Data engineering and analytics",
+          "text": "PySpark, Apache Spark, Spark SQL, MQTT, Mosquitto, Apache Airflow."
+        },
+        {
+          "heading": "Cloud and databases",
+          "text": "AWS, AWS IoT Core, AWS Lambda, AWS SES, AWS EC2, Azure, PostgreSQL, MySQL, InfluxDB."
+        },
+        {
+          "heading": "Visualization tools",
+          "text": "Power BI, Tableau, Grafana, Plotly, matplotlib."
+        },
+        {
+          "heading": "DevOps and development tools",
+          "text": "Docker, Kubernetes, Linux, Git, Flask, REST APIs, FastAPI, GitHub Actions, pytest, ruff."
+        },
+        {
+          "heading": "Machine learning techniques used in shipped work",
+          "text": "Random Forest classification, One-Class SVM novelty and out-of-distribution detection, ADWIN concept-drift detection, convolutional neural networks, YOLOv5 object detection, MOG2 background subtraction, centroid tracking, time-domain and frequency-domain feature extraction, session-level and group-level held-out evaluation."
+        },
+        {
+          "heading": "Hardware and embedded",
+          "text": "Raspberry Pi 5, DHT temperature and humidity sensors, Mosquitto MQTT broker, on-device feature extraction under millisecond latency budgets."
+        },
+        {
+          "heading": "Physics and simulation",
+          "text": "Lumped-capacitance thermal modelling, speed-dependent convection and radiation, Newtonian cooling-curve analysis, drag-torque inversion, control engineering and mechatronics fundamentals."
+        }
+      ]
+    },
+    {
+      "id": "automotive",
+      "section": "skills",
+      "title": "Automotive, ADAS and vehicle perception work",
+      "type": "domain",
+      "domain": "automotive, robotics",
+      "date": "2026-08",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Automotive and ADAS relevant experience",
+          "text": "Tharun's published work sits in vehicle perception, vehicle networks and vehicle condition monitoring, which are the building blocks ADAS and active safety features are assembled from. Four projects carry that domain directly: traffic video perception with vehicle detection, tracking, classification and calibrated speed estimation; automatic number plate recognition with YOLOv5 detection and robustness testing under degraded imaging; CAN bus signal decoding and fault classification; and brake and wheel-end condition monitoring built on rotor thermal physics. Ask him directly for the current state of any ADAS specific repository, since this site publishes a selected subset of his work."
+        },
+        {
+          "heading": "Vehicle perception and camera pipelines",
+          "text": "Camera perception work covers object detection with YOLOv5, convolutional classification of vehicle types across four classes, MOG2 background subtraction, contour filtering, centroid tracking with multi-frame voting for identity stability, and speed estimation derived from centroid displacement, frame rate and lane-width calibration. Robustness was tested deliberately through rotation, brightness and contrast shifts, and synthetic occlusion, which is the failure-mode thinking driver assistance perception demands."
+        },
+        {
+          "heading": "Vehicle networks and in-vehicle signals",
+          "text": "CAN bus and controller area network experience comes from CANalyse Edge, a CAN signal decoding and diagnostic validation service built with python-can and cantools. The work covers decoding raw frames into physical signals, validating them against expected ranges, and classifying faults from the decoded stream."
+        },
+        {
+          "heading": "Sensor diagnostics and functional safety adjacent work",
+          "text": "Drift-aware edge predictive maintenance, per-feature ADWIN drift detection, rolling confidence and cross-sensor majority voting all address the same question active safety systems face: deciding whether a signal change is a real fault or a benign environmental shift before acting on it. Evaluation is done with group-level and session-level held-out splits so that reported accuracy survives contact with unseen vehicles and unseen recordings."
+        }
+      ]
+    },
+    {
+      "id": "achievements",
+      "section": "achievements",
+      "title": "Achievements and certifications",
+      "type": "achievement",
+      "domain": "",
+      "date": "2026-03",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "WayneHacks 4 hackathon",
+          "text": "Third place out of more than 30 teams at WayneHacks 4, hosted by Wayne State University and TechTown Detroit in March 2026. Aligned a three-person cross-functional team from Computer Science and Robotics under a 24-hour constraint, and owned the model pipeline: a nine-feature Random Forest over Wi-Fi channel state information, served through FastAPI and WebSockets. Reached 75.6 percent accuracy and 77.8 percent fall recall. The project is published as GuardWave. During the 24-hour build the team also iterated through a physical sensor prototype, a PIR motion sensor wired to a microcontroller, before converging on the Wi-Fi CSI approach that shipped."
+        },
+        {
+          "heading": "Certifications",
+          "text": "Artificial Intelligence Fundamentals from Google on Coursera. Transfer Learning for NLP with TensorFlow Hub on Coursera. Computer Vision with Azure Cognitive Services from Microsoft. Claude 101 from Anthropic."
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "section": "contact",
+      "title": "Contact and availability",
+      "type": "contact",
+      "domain": "",
+      "date": "2026-08",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "How to reach Tharun",
+          "text": "Email: tharunmysuru@gmail.com. LinkedIn: /in/tharun-subramanya-p. GitHub: 02-tharuns. He usually responds within a day or two."
+        },
+        {
+          "heading": "Roles he is open to",
+          "text": "Open to roles in applied AI, machine learning, industrial IoT, edge AI, and robotics."
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "section": "projects",
+      "title": "LLM, generative AI and retrieval work",
+      "type": "project",
+      "domain": "ai",
+      "date": "2026-08",
+      "repo": "",
+      "status": "",
+      "volunteer": true,
+      "sections": [
+        {
+          "heading": "Chappie, the retrieval system running on this site",
+          "text": "Chappie is a retrieval-augmented generation system Tharun built over his own CV, projects, education and skills. It runs entirely in the visitor's browser on GitHub Pages, with no server, no API key and no cold start. Retrieval is Okapi BM25 over a prebuilt index, with query expansion and same-document damping, and a full question is answered in roughly five milliseconds."
+        },
+        {
+          "heading": "How Chappie is guarded",
+          "text": "Six gates run in order of cost: input hygiene, prompt-injection screening, out-of-distribution scope detection, an evidence floor applied after retrieval, and citation integrity checked on the way out. Answering is extractive, meaning sentences are quoted from the indexed source rather than paraphrased by a generative model, which makes a fabricated claim structurally impossible rather than merely unlikely."
+        },
+        {
+          "heading": "How Chappie is evaluated",
+          "text": "A 69-case evaluation suite across four groups runs in headless Chromium against the real page on every push, and blocks the deployment on regression. It reports attack success rate and false refusal rate, the second being the measure most projects skip. Both currently sit at zero."
+        },
+        {
+          "heading": "The generative answering path and LLM API integration",
+          "text": "The generative path is implemented and ships disabled by default. A FastAPI service deployable to Azure Container Apps holds the model key server-side, receives the question together with the already-retrieved passages, and returns a generated answer that may cite only passages that were actually retrieved. Citation validation runs on both the server and the client, so a hallucinated source is rejected rather than displayed."
+        },
+        {
+          "heading": "Ingestion pipeline behind the retrieval system",
+          "text": "An offline Python pipeline chunks Markdown source documents on their headings, tokenises and stems them with a stemmer mirrored exactly in the browser, computes BM25 term statistics, and emits a single static index file. Continuous integration fails the build if the committed index has drifted out of date with the source documents."
+        },
+        {
+          "heading": "Generative AI and LLM tooling",
+          "text": "Tharun's AI framework skills are Hugging Face Transformers, LangChain and LlamaIndex, and he lists OpenAI and Anthropic among the LLM tooling he works with. He is working through a self-directed generative AI and LLM track covering Hugging Face, LangChain and retrieval-augmented generation."
+        }
+      ]
+    }
+  ]
+}

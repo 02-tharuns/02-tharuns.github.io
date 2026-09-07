@@ -1,4 +1,10 @@
-# How Chappie is built
+# How Chappie is built (v1, static)
+
+This document covers the original static build: GitHub Pages, browser-only
+BM25 retrieval, an optional thin generation backend. It's still accurate
+and this build still works. For the hybrid-retrieval React/FastAPI build
+with observability and evals dashboards, see
+[`V2_ARCHITECTURE.md`](V2_ARCHITECTURE.md) instead.
 
 Nothing here is hardcoded. Every answer is retrieved at request time from an
 index built out of `content/`. Change a Markdown file, rebuild, and the answers
@@ -68,7 +74,7 @@ assets/
   chatbot.css               Widget styling. Inherits the site's design tokens.
 
 evals/
-  suites.json               81 cases in four groups.
+  suites.json               97 cases in four groups.
   run_evals.mjs             Drives the real page in headless Chromium.
 
 backend/                    OPTIONAL. Only needed for generated answers.
@@ -99,7 +105,7 @@ bails with a console error if `corpus.js` has not run yet.
    ├─ policy  visa / salary / notice period → route to email, stop here
    ├─ tokenise + stem      → [drift, detection, done]
    ├─ expand via synonyms  → + [adwin, distribution, shift]
-   ├─ BM25 over all 68 passages, damp repeats from one document
+   ├─ BM25 over all 72 passages, damp repeats from one document
    ├─ gate 2  out-of-domain? vocabulary coverage AND score must both fail
    ├─ gate 3  nothing clears 0.34 confidence → route to him, never improvise
    ├─ compose pick the highest-overlap sentences, quote them verbatim

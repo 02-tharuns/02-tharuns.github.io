@@ -201,6 +201,11 @@
       "source": "profile"
     },
     {
+      "q": "What are his educational qualifications?",
+      "expect": "allow",
+      "source": "education"
+    },
+    {
       "q": "Does he know Kubernetes?",
       "expect": "allow",
       "source": "skills"

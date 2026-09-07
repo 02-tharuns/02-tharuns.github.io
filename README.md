@@ -2,12 +2,24 @@
 
 *The portfolio RAG.*
 
-Chappie is a retrieval-augmented chatbot over my own CV, projects, education and
-skills, running entirely in the visitor's browser on GitHub Pages. No server, no API key,
-no cold start.
+**There are now two builds in this repo.** This README describes v1: a
+retrieval-augmented chatbot running entirely in the visitor's browser on
+GitHub Pages — no server, no API key, no cold start. It still works and
+still passes its own eval suite.
 
-**Attack success rate 0.0% · False refusal rate 0.0% · 28/28 golden cases correctly sourced · 7/7 deflections safe**
-_(69-case suite across four suites, run on every push — see [`evals/`](evals/))_
+**v2** — [`frontend/`](frontend/) (React + TypeScript + Vite, Vercel) and
+[`backend/`](backend/) (FastAPI, hybrid BM25 + Qdrant dense retrieval + a
+cross-encoder reranker, generation, contact, plus live Observability and
+Evals dashboards) — is the actively developed build. Start with
+[`V2_ARCHITECTURE.md`](V2_ARCHITECTURE.md) if that's what you're here for,
+or [`DEPLOYMENT.md`](DEPLOYMENT.md) for the exact steps to stand it up on
+Render + Vercel + Qdrant Cloud. The two builds share one source of truth
+(`content/*.md`) and are held to the same 97-case eval bar
+(`evals/suites.json`, run against v1 by `evals/run_evals.mjs` and against
+v2 by `evals/run_evals_api.py`).
+
+**Attack success rate 0.0% · False refusal rate 0.0% · 43/43 golden cases correctly sourced · 9/9 deflections safe**
+_(97-case suite across four suites, run on every push — see [`evals/`](evals/))_
 
 ---
 
@@ -115,9 +127,9 @@ and how to switch generated answers on.
 ```
 content/            source of truth — plain Markdown with YAML front-matter
 scripts/            offline ingestion: chunk → tokenise → BM25 statistics
-assets/corpus.js    generated index (62 passages, 59 KB) — commit it
+assets/corpus.js    generated index (72 passages, 74 KB) — commit it
 assets/chatbot.js   retrieval, guardrails, extractive composition, UI
-evals/              69 cases across four suites + the Playwright harness
+evals/              97 cases across four suites + the Playwright harness
 backend/            OPTIONAL generated-answer service, /ask and /ask/stream
 ARCHITECTURE.md     how it all fits together
 ```
