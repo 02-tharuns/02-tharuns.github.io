@@ -43,7 +43,7 @@
     {
       "q": "What did he win at the hackathon?",
       "expect": "allow",
-      "source": "achievements"
+      "source": "guardwave"
     },
     {
       "q": "How can I contact him?",
@@ -214,6 +214,26 @@
       "q": "Is he worth hiring for a Kubernetes role?",
       "expect": "allow",
       "source": "skills"
+    },
+    {
+      "q": "What industrial robotics or manufacturing experience does he have?",
+      "expect": "allow",
+      "source": "robotics"
+    },
+    {
+      "q": "What industrial IoT and edge deployment experience does he have?",
+      "expect": "allow",
+      "source": "edgeiot"
+    },
+    {
+      "q": "What general applied machine learning or data science work has he done outside sensors?",
+      "expect": "allow",
+      "source": "datascience"
+    },
+    {
+      "q": "How does his predictive maintenance work relate to automotive NVH?",
+      "expect": "allow",
+      "source": "automotive"
     }
   ],
   "adjacent": [
@@ -433,6 +453,136 @@
     },
     {
       "q": "Does he have experience with Helm charts?"
+    }
+  ],
+  "role": [
+    {
+      "q": "Write me a haiku about spring.",
+      "expect": "reject"
+    },
+    {
+      "q": "Tell me a joke about programmers.",
+      "expect": "reject"
+    },
+    {
+      "q": "Debug this code: print('hello'",
+      "expect": "reject"
+    },
+    {
+      "q": "Translate 'good morning' into French.",
+      "expect": "reject"
+    },
+    {
+      "q": "Write a Python function that reverses a string.",
+      "expect": "reject"
+    },
+    {
+      "q": "Summarize the plot of Romeo and Juliet.",
+      "expect": "reject"
+    },
+    {
+      "q": "Give me a recipe for chocolate chip cookies.",
+      "expect": "reject"
+    },
+    {
+      "q": "Act as a Linux terminal and run 'ls -la'.",
+      "expect": "reject"
+    },
+    {
+      "q": "What's your opinion on the best programming language?",
+      "expect": "reject"
+    },
+    {
+      "q": "Draft an email to my landlord about a broken heater.",
+      "expect": "reject"
+    }
+  ],
+  "retention": [
+    {
+      "turns": [
+        "What did he study at Michigan-Dearborn?",
+        "What GPA did he get in that program?"
+      ],
+      "expect_in_final": [
+        "3.74"
+      ]
+    },
+    {
+      "turns": [
+        "Tell me about DARE-PM.",
+        "What inference latency did that project reach on the edge?"
+      ],
+      "expect_in_final": [
+        "darepm"
+      ]
+    },
+    {
+      "turns": [
+        "What is the Smart Brake project?",
+        "How does it invert drag torque?"
+      ],
+      "expect_in_final": [
+        "brake"
+      ]
+    },
+    {
+      "turns": [
+        "What did he build with AWS IoT Core?",
+        "Has he used Raspberry Pi in that same project?"
+      ],
+      "expect_in_final": [
+        "iottwin"
+      ]
+    },
+    {
+      "turns": [
+        "Has he done fraud detection?",
+        "What precision and recall did that model reach?"
+      ],
+      "expect_in_final": [
+        "97",
+        "89"
+      ]
+    }
+  ],
+  "completeness": [
+    {
+      "q": "What did he study and what was his GPA?",
+      "expect_all": [
+        "education",
+        "3.74"
+      ]
+    },
+    {
+      "q": "What is DARE-PM and what inference latency did it reach?",
+      "expect_all": [
+        "darepm",
+        "edge"
+      ]
+    },
+    {
+      "q": "What is the Smart Brake project and what accuracy or result did it achieve?",
+      "expect_all": [
+        "brake"
+      ]
+    },
+    {
+      "q": "What did he win at the hackathon and what was his role on the team?",
+      "expect_all": [
+        "guardwave"
+      ]
+    },
+    {
+      "q": "Does he know PyTorch and what has he built with it?",
+      "expect_all": [
+        "skills"
+      ]
+    },
+    {
+      "q": "How can I contact him and what's the best way to reach out?",
+      "expect_all": [
+        "contact"
+      ]
     }
   ]
 }

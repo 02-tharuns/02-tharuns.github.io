@@ -4,6 +4,7 @@ section: projects
 title: Supply Chain Risk Data Pipeline and Predictive Analytics
 type: project
 date: 2026-07
+repo: https://github.com/02-tharuns/ai-logistics-disruption-simulator
 domain: data-science, industrial
 ---
 

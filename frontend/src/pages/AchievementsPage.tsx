@@ -6,7 +6,7 @@ export default function AchievementsPage() {
   return (
     <section className="content-section content-section-page">
       <h1>Achievements</h1>
-      <DocGrid docs={achievements} />
+      <DocGrid docs={achievements} showMeta />
     </section>
   );
 }

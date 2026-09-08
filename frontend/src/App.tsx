@@ -9,6 +9,7 @@ import ContactPage from "./pages/ContactPage";
 import ObservabilityPage from "./pages/ObservabilityPage";
 import EvalsPage from "./pages/EvalsPage";
 import ChatWidget from "./components/ChatWidget";
+import BgScene from "./components/BgScene";
 import { BOT_NAME } from "./lib/config";
 
 export default function App() {
@@ -20,6 +21,10 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <BgScene />
+      <div className="bg-grain" aria-hidden="true" />
+      <div className="bg-vignette" aria-hidden="true" />
+
       <header className="topnav">
         <nav className="topnav-links">
           <NavLink to="/about" className={() => (portfolioActive ? "active" : "")}>
@@ -32,6 +37,9 @@ export default function App() {
             Evals
           </NavLink>
         </nav>
+        <a className="nav-cta" href="/resume.pdf" download>
+          Download Resume
+        </a>
       </header>
 
       <main>

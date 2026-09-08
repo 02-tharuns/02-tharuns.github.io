@@ -60,12 +60,27 @@ CREATE TABLE IF NOT EXISTS eval_runs (
     recall_at_k REAL NOT NULL,
     no_answer_accuracy REAL NOT NULL,
     citation_correctness REAL NOT NULL,
+    answer_relevancy REAL,
+    role_adherence REAL,
+    knowledge_retention REAL,
+    conversation_completeness REAL,
     passed INTEGER NOT NULL,
     git_sha TEXT,
     cases_json TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_eval_runs_started_at ON eval_runs(started_at);
 """
+
+# New eval_runs columns added after the table's first release. `CREATE TABLE
+# IF NOT EXISTS` above only helps a brand-new database — an already-deployed
+# Render instance has the old table shape, so it needs an explicit ALTER for
+# each one, guarded because SQLite has no `ADD COLUMN IF NOT EXISTS`.
+_NEW_EVAL_RUN_COLUMNS = {
+    "answer_relevancy": "REAL",
+    "role_adherence": "REAL",
+    "knowledge_retention": "REAL",
+    "conversation_completeness": "REAL",
+}
 
 _lock = threading.Lock()
 
@@ -76,6 +91,13 @@ class Store:
         self.db_path = db_path
         with self._connect() as conn:
             conn.executescript(SCHEMA)
+            self._migrate(conn)
+
+    def _migrate(self, conn: sqlite3.Connection) -> None:
+        existing = {row["name"] for row in conn.execute("PRAGMA table_info(eval_runs)").fetchall()}
+        for name, col_type in _NEW_EVAL_RUN_COLUMNS.items():
+            if name not in existing:
+                conn.execute(f"ALTER TABLE eval_runs ADD COLUMN {name} {col_type}")
 
     @contextmanager
     def _connect(self):
@@ -181,13 +203,16 @@ class Store:
             conn.execute(
                 "INSERT OR REPLACE INTO eval_runs "
                 "(id, started_at, duration_ms, suite_counts_json, attack_success_rate, false_refusal_rate, "
-                " recall_at_k, no_answer_accuracy, citation_correctness, passed, git_sha, cases_json) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                " recall_at_k, no_answer_accuracy, citation_correctness, answer_relevancy, role_adherence, "
+                " knowledge_retention, conversation_completeness, passed, git_sha, cases_json) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     run["id"], run["started_at"], run["duration_ms"], json.dumps(run["suite_counts"]),
                     run["attack_success_rate"], run["false_refusal_rate"], run["recall_at_k"],
-                    run["no_answer_accuracy"], run["citation_correctness"], int(run["passed"]),
-                    run.get("git_sha"), json.dumps(run["cases"]),
+                    run["no_answer_accuracy"], run["citation_correctness"],
+                    run.get("answer_relevancy"), run.get("role_adherence"),
+                    run.get("knowledge_retention"), run.get("conversation_completeness"),
+                    int(run["passed"]), run.get("git_sha"), json.dumps(run["cases"]),
                 ),
             )
 
@@ -228,11 +253,18 @@ def _report_row(r: sqlite3.Row) -> dict:
 
 
 def _eval_run_row(r: sqlite3.Row, with_cases: bool) -> dict:
+    keys = r.keys()
     out = {
         "id": r["id"], "started_at": r["started_at"], "duration_ms": r["duration_ms"],
         "suite_counts": json.loads(r["suite_counts_json"]), "attack_success_rate": r["attack_success_rate"],
         "false_refusal_rate": r["false_refusal_rate"], "recall_at_k": r["recall_at_k"],
         "no_answer_accuracy": r["no_answer_accuracy"], "citation_correctness": r["citation_correctness"],
+        # Absent on rows published before these columns existed — None reads
+        # as "n/a" on the dashboard rather than a misleading 0%.
+        "answer_relevancy": r["answer_relevancy"] if "answer_relevancy" in keys else None,
+        "role_adherence": r["role_adherence"] if "role_adherence" in keys else None,
+        "knowledge_retention": r["knowledge_retention"] if "knowledge_retention" in keys else None,
+        "conversation_completeness": r["conversation_completeness"] if "conversation_completeness" in keys else None,
         "passed": bool(r["passed"]), "git_sha": r["git_sha"],
     }
     if with_cases:

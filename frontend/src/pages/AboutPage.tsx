@@ -4,6 +4,7 @@ export default function AboutPage() {
   const about = docsBySection("about");
   return (
     <section className="hero">
+      <img className="hero-photo" src="/img/profile/tharun.webp" alt="Tharun Subramanya" />
       <p className="eyebrow">Applied ML · Robotics · Edge Systems</p>
       <h1>Tharun Subramanya</h1>
       {about.map((doc) => (

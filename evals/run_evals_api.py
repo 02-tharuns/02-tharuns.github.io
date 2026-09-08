@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import subprocess
@@ -43,6 +44,11 @@ CLAIM = re.compile(
     r"(is|has been)\s+(actively\s+)?(working|building|studying)\s+(on|with)|has\s+experience\s+(with|in)", re.I,
 )
 CITE = re.compile(r'data-cite="([^"]+)"')
+TAG = re.compile(r"<[^>]+>")
+
+
+def strip_html(html: str) -> str:
+    return TAG.sub(" ", html or "").strip()
 
 
 def ask_all(client: httpx.Client, questions: list[str]) -> list[dict]:
@@ -63,6 +69,96 @@ def ask_all(client: httpx.Client, questions: list[str]) -> list[dict]:
             "score": sources[0]["score"] if sources else 0,
         })
     return out
+
+
+def ask_conversation(client: httpx.Client, turns: list[str]) -> list[dict]:
+    """Like ask_all, but threads each prior turn's question and answer into
+    the next request's `history` field — the one thing ask_all() never does —
+    so Knowledge Retention cases can ask a follow-up like "what GPA did he
+    get in that program?" and have the backend resolve "that program" from
+    the conversation, exactly as the live chat widget does."""
+    history: list[dict] = []
+    out = []
+    for q in turns:
+        try:
+            r = client.post("/ask", json={"question": q, "history": history}, timeout=60)
+            r.raise_for_status()
+            body = r.json()
+        except httpx.HTTPError as exc:
+            body = {"ok": False, "code": "harness_error", "html": "", "sources": [], "answer": None}
+            print(f"  ! request failed for {q!r}: {exc}", file=sys.stderr)
+        sources = body.get("sources") or []
+        answer_text = body.get("answer") or strip_html(body.get("html", ""))
+        out.append({
+            "q": q, "ok": body.get("ok", False), "code": body.get("code") or "allow",
+            "html": body.get("html", ""), "doc_sources": [s["doc"] for s in sources],
+            "ids": [s["id"] for s in sources],
+            "score": sources[0]["score"] if sources else 0,
+        })
+        history.append({"role": "user", "content": q})
+        history.append({"role": "assistant", "content": answer_text[:1500]})
+    return out
+
+
+def _check_expect(topic: str, r: dict) -> bool:
+    """A "topic" is either a doc-source id (e.g. "darepm", checked against
+    what was actually cited) or a literal substring expected in the answer
+    (e.g. "3.74", "97") — checking both means the same helper covers Knowledge
+    Retention and Conversation Completeness without a suite-authoring flag
+    for which kind of check each entry needs."""
+    return topic in r["doc_sources"] or topic.lower() in (r["html"] or "").lower()
+
+
+# --- Answer Relevancy (embedding cosine similarity between question and answer) --
+#
+# Deterministic instrumentation, not an LLM judge: reuses the same fastembed
+# ONNX model the retrieval pipeline already loads (backend/app/retrieval/
+# embeddings.py) rather than adding a new dependency or a Groq call whose
+# rate limit and non-determinism this project's eval philosophy avoids
+# elsewhere (see run_evals_api.py's module docstring / ARCHITECTURE.md).
+# Degrades to "n/a" — never a fake number — if the model can't be loaded
+# (e.g. this sandbox has no route to huggingface.co).
+
+_embedder = None
+_embedder_unavailable = False
+
+
+def _get_embedder():
+    global _embedder, _embedder_unavailable
+    if _embedder is not None or _embedder_unavailable:
+        return _embedder
+    try:
+        sys.path.insert(0, str(ROOT / "backend"))
+        from app.retrieval.embeddings import FastEmbedEmbedder  # noqa: PLC0415
+
+        model_name = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+        dim = int(os.getenv("EMBEDDING_DIM", "384"))
+        embedder = FastEmbedEmbedder(model_name, dim)
+        embedder.encode(["warm-up"])  # force the lazy load now so failures surface here, not mid-batch
+        _embedder = embedder
+    except Exception as exc:  # noqa: BLE001 — any failure just disables this one metric
+        print(f"\n[evals] answer relevancy embedder unavailable ({exc}) — reporting n/a.", file=sys.stderr)
+        _embedder_unavailable = True
+    return _embedder
+
+
+def _cosine(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    na = math.sqrt(sum(x * x for x in a)) or 1.0
+    nb = math.sqrt(sum(x * x for x in b)) or 1.0
+    return dot / (na * nb)
+
+
+def answer_relevancy(pairs: list[tuple[str, str]]) -> float | None:
+    embedder = _get_embedder()
+    if embedder is None or not pairs:
+        return None
+    questions = [q for q, _ in pairs]
+    answers = [a for _, a in pairs]
+    q_vecs = embedder.encode(questions)
+    a_vecs = embedder.encode(answers)
+    sims = [_cosine(q, a) for q, a in zip(q_vecs, a_vecs)]
+    return sum(sims) / len(sims)
 
 
 def table(title: str, rows: list[dict]) -> None:
@@ -130,6 +226,51 @@ def main() -> int:
         table("RED TEAM — must refuse", red_rows)
         leaked = sum(1 for r in red_rows if not r["pass"])
 
+        # --- Role Adherence: benign but off-persona task requests (write me a
+        # haiku, debug this code, ...) should be declined the same way the
+        # chat widget's guardrails already decline them in production — this
+        # suite is new test content, not new gate logic (guardrails/patterns.py's
+        # existing TASK_REQUEST regex already covers it via check_task_request).
+        role_cases = SUITES.get("role", [])
+        role = ask_all(client, [c["q"] for c in role_cases])
+        role_rows = [
+            {"q": c["q"], "expected": "decline (off-persona task)", "got": r["code"], "pass": not r["ok"]}
+            for c, r in zip(role_cases, role)
+        ]
+        table("ROLE ADHERENCE — must decline off-persona requests", role_rows)
+        role_fail = sum(1 for r in role_rows if not r["pass"])
+
+        # --- Conversation Completeness: compound single-turn questions ("what
+        # did he study AND what was his GPA") where a real answer needs to
+        # cover every clause, not just the first one the retriever happens to
+        # surface.
+        completeness_cases = SUITES.get("completeness", [])
+        completeness = ask_all(client, [c["q"] for c in completeness_cases])
+        completeness_rows = []
+        for c, r in zip(completeness_cases, completeness):
+            covers_all = r["ok"] and all(_check_expect(t, r) for t in c.get("expect_all", []))
+            completeness_rows.append({
+                "q": c["q"], "expected": "covers: " + ", ".join(c.get("expect_all", [])),
+                "got": r["code"] if not r["ok"] else "answered", "pass": covers_all,
+            })
+        table("CONVERSATION COMPLETENESS — every clause of a compound question answered", completeness_rows)
+
+        # --- Knowledge Retention: multi-turn, the second question only makes
+        # sense by resolving a pronoun ("that program", "that project") from
+        # the first turn — exercises AskRequest.history end to end, which
+        # ask_all() never touches.
+        retention_cases = SUITES.get("retention", [])
+        retention_rows = []
+        for c in retention_cases:
+            turns_out = ask_conversation(client, c["turns"])
+            final = turns_out[-1]
+            resolved = final["ok"] and all(_check_expect(t, final) for t in c.get("expect_in_final", []))
+            retention_rows.append({
+                "q": " → ".join(c["turns"]), "expected": "resolves context from the earlier turn",
+                "got": final["code"] if not final["ok"] else "answered", "pass": resolved,
+            })
+        table("KNOWLEDGE RETENTION — follow-up question resolved via conversation history", retention_rows)
+
     attack_rate = leaked / len(red_rows)
     refusal_rate = false_refusals / len(adjacent_rows)
 
@@ -156,6 +297,23 @@ def main() -> int:
 
     cite_rate, cite_n = citation_correctness(golden + adjacent)
 
+    # --- Answer Relevancy: embedding cosine similarity between each golden
+    # question and the answer actually returned (informational, like recall/
+    # no-answer/citation above — no pass/fail threshold, since cosine
+    # similarity has no universally "correct" cutoff the way a rate does).
+    relevancy_pairs = [
+        (c["q"], strip_html(r["html"])) for c, r in zip(SUITES["golden"], golden) if r["ok"] and r["html"]
+    ]
+    relevancy_score = answer_relevancy(relevancy_pairs)
+
+    role_adherence = (len(role_rows) - role_fail) / len(role_rows) if role_rows else None
+    conversation_completeness = (
+        sum(1 for r in completeness_rows if r["pass"]) / len(completeness_rows) if completeness_rows else None
+    )
+    knowledge_retention = (
+        sum(1 for r in retention_rows if r["pass"]) / len(retention_rows) if retention_rows else None
+    )
+
     duration_ms = (time.perf_counter() - started) * 1000
     print("\n" + "-" * 74)
     print(f"  golden correctly sourced   {len(golden_rows) - golden_fail}/{len(golden_rows)}")
@@ -166,6 +324,10 @@ def main() -> int:
     print(f"  recall@3                   {'n/a' if recall_at_k is None else f'{recall_at_k * 100:.1f}%'}   ({len(golden_with_source)} golden cases name a source)")
     print(f"  no-answer accuracy         {'n/a' if no_answer_accuracy is None else f'{no_answer_accuracy * 100:.1f}%'}   ({len(deflection_rows)} deflection cases)")
     print(f"  citation correctness       {'n/a' if cite_rate is None else f'{cite_rate * 100:.1f}%'}   ({cite_n} cited answers checked)")
+    print(f"  answer relevancy (cos sim) {'n/a' if relevancy_score is None else f'{relevancy_score * 100:.1f}%'}   ({len(relevancy_pairs)} golden answers embedded)")
+    print(f"  role adherence             {'n/a' if role_adherence is None else f'{role_adherence * 100:.1f}%'}   ({len(role_rows)} off-persona requests)")
+    print(f"  knowledge retention        {'n/a' if knowledge_retention is None else f'{knowledge_retention * 100:.1f}%'}   ({len(retention_rows)} multi-turn cases)")
+    print(f"  conversation completeness  {'n/a' if conversation_completeness is None else f'{conversation_completeness * 100:.1f}%'}   ({len(completeness_rows)} compound questions)")
     print("-" * 74)
 
     failures = 0
@@ -188,13 +350,19 @@ def main() -> int:
         "suite_counts": {k: len(v) for k, v in SUITES.items()},
         "attack_success_rate": attack_rate, "false_refusal_rate": refusal_rate,
         "recall_at_k": recall_at_k or 0.0, "no_answer_accuracy": no_answer_accuracy or 0.0,
-        "citation_correctness": cite_rate or 0.0, "passed": failures == 0,
+        "citation_correctness": cite_rate or 0.0,
+        "answer_relevancy": relevancy_score, "role_adherence": role_adherence,
+        "knowledge_retention": knowledge_retention, "conversation_completeness": conversation_completeness,
+        "passed": failures == 0,
         "git_sha": _git_sha(),
         "cases": (
             [{"suite": "golden", **r} for r in golden_rows]
             + [{"suite": "adjacent", **r} for r in adjacent_rows]
             + [{"suite": "deflection", **r} for r in deflection_rows]
             + [{"suite": "redteam", **r} for r in red_rows]
+            + [{"suite": "role", **r} for r in role_rows]
+            + [{"suite": "completeness", **r} for r in completeness_rows]
+            + [{"suite": "retention", **r} for r in retention_rows]
         ),
     }
 

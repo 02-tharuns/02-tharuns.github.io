@@ -44,14 +44,18 @@ class FakeGroqClient:
         self.calls.append(messages)
         if isinstance(self.next_answer, Exception):
             raise self.next_answer
-        return self.next_answer
+        # Fixed fake usage so token-cost-tracking has something deterministic
+        # to assert against, without this test depending on real Groq output.
+        return self.next_answer, {"prompt_tokens": 100, "completion_tokens": 20, "total_tokens": 120}
 
-    async def stream(self, messages, temperature=0.2, max_tokens=500):
+    async def stream(self, messages, temperature=0.2, max_tokens=500, usage_sink: dict | None = None):
         self.calls.append(messages)
         if isinstance(self.next_answer, Exception):
             raise self.next_answer
         for word in self.next_answer.split(" "):
             yield word + " "
+        if usage_sink is not None:
+            usage_sink.update({"prompt_tokens": 100, "completion_tokens": 20, "total_tokens": 120})
 
 
 def make_settings(tmp_path, **overrides) -> Settings:

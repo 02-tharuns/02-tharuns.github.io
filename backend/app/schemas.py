@@ -140,6 +140,12 @@ class EvalRunSummary(BaseModel):
     recall_at_k: float
     no_answer_accuracy: float
     citation_correctness: float
+    # Optional + defaulted to None: older published runs (before these
+    # categories existed) don't have them, and "n/a" beats a fake 0%.
+    answer_relevancy: float | None = None
+    role_adherence: float | None = None
+    knowledge_retention: float | None = None
+    conversation_completeness: float | None = None
     passed: bool
     git_sha: str | None = None
 

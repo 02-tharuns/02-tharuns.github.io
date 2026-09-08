@@ -5,6 +5,7 @@ title: Smart Brake and Wheel-End Condition Monitor
 type: project
 date: 2026-08
 status: In progress
+repo: https://github.com/02-tharuns/Smart-Brake-and-Tire-Condition-Monitor
 domain: automotive
 ---
 

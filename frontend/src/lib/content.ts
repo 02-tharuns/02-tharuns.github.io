@@ -14,6 +14,7 @@ export interface ContentDoc {
   date: string;
   repo: string;
   status: string;
+  images: string[];
   volunteer: boolean;
   sections: ContentSection[];
 }

@@ -170,6 +170,17 @@ EXPANSIONS: dict[str, list[str]] = {
     "weakness": ["gap", "not", "limited"],
     "gap": ["gaps", "not", "limited"],
     "gaps": ["gap", "not", "limited"],
+    # Domain/application vocabulary a recruiter is likely to use when asking
+    # "does this transfer to X" — bridges to the domain-fit docs
+    # (32/33/34-domain-*.md) added alongside 31-automotive-adas.md.
+    "manufacturing": ["industrial", "robotics", "production", "quality", "metrology"],
+    "factory": ["manufacturing", "industrial", "production"],
+    "production": ["manufacturing", "industrial", "quality"],
+    "quality": ["metrology", "statistical", "control", "manufacturing"],
+    "metrology": ["quality", "measurement", "manufacturing"],
+    "embedded": ["edge", "hardware", "onboard", "raspberry"],
+    "onboard": ["edge", "embedded", "hardware"],
+    "constrained": ["edge", "embedded", "hardware"],
 }
 
 EXPANSION_KEYS = {stem(k) for k in EXPANSIONS}

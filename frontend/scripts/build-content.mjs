@@ -64,6 +64,7 @@ function main() {
       date: meta.date || "",
       repo: meta.repo || "",
       status: meta.status || "",
+      images: (meta.images || "").split(",").map((s) => s.trim()).filter(Boolean),
       volunteer: (meta.volunteer || "true").toLowerCase() !== "false",
       sections: chunkSections(body),
     };

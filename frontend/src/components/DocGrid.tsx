@@ -29,6 +29,13 @@ export default function DocGrid({ docs, showMeta }: { docs: ContentDoc[]; showMe
               </div>
             )}
           </header>
+          {doc.images?.length > 0 && (
+            <div className="doc-photos">
+              {doc.images.map((src) => (
+                <img src={src} alt={doc.title} key={src} loading="lazy" />
+              ))}
+            </div>
+          )}
           {doc.sections.map((s) => (
             <div className="doc-subsection" key={s.heading}>
               <h4>{s.heading}</h4>

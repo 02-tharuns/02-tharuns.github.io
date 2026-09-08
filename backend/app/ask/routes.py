@@ -13,7 +13,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Request
 from fastapi.responses import StreamingResponse
 
 from ..deps import AppState, get_state
-from ..generation.groq_client import GroqError
+from ..generation.groq_client import GroqError, estimate_cost_usd
 from ..generation.prompt import build_messages
 
 # Generation is a best-effort enhancement on top of extractive answering,
@@ -49,6 +49,21 @@ async def gap(report: GapReport, request: Request, background: BackgroundTasks, 
     return {"ok": True}
 
 
+def _record_usage(rec: dict, model: str, usage: dict | None) -> None:
+    """Token Cost Tracking: fold Groq's usage block into the "generate"/
+    "generate_stream" span's meta, so the observability dashboard can read
+    cost straight off the trace it already stores — no new table, no new
+    endpoint. Silently a no-op if usage wasn't reported (e.g. an older Groq
+    response shape) or the model isn't in the pricing table."""
+    if not usage:
+        return
+    rec["meta"]["prompt_tokens"] = usage.get("prompt_tokens")
+    rec["meta"]["completion_tokens"] = usage.get("completion_tokens")
+    cost = estimate_cost_usd(model, usage)
+    if cost is not None:
+        rec["meta"]["cost_usd"] = cost
+
+
 def _record(state: AppState, trace: Trace, response: AskResponse, gap_topics: list[str]) -> None:
     top_score = response.sources[0].score if response.sources else None
     trace_dict = trace.finish(verdict=response.code or "allow", reason=None, score=top_score)
@@ -75,9 +90,10 @@ async def ask(body: AskRequest, request: Request, state: AppState = Depends(get_
             response = finish_extractive(state.guardrails, pending)
     else:
         try:
-            with trace.span("generate", model=state.settings.groq_model):
+            with trace.span("generate", model=state.settings.groq_model) as rec:
                 messages = build_messages(pending.question, pending.hits, body.history)
-                raw = await state.groq.complete(messages)
+                raw, usage = await state.groq.complete(messages)
+                _record_usage(rec, state.settings.groq_model, usage)
             response = finish_generated(state.guardrails, pending, raw)
         except GENERATION_FAILURE:
             with trace.span("extractive_fallback"):
@@ -113,11 +129,13 @@ async def ask_stream(body: AskRequest, request: Request, state: AppState = Depen
                 response = finish_extractive(guardrails, pending)
         else:
             try:
-                with trace.span("generate_stream", model=state.settings.groq_model):
+                with trace.span("generate_stream", model=state.settings.groq_model) as rec:
                     messages = build_messages(pending.question, pending.hits, body.history)
-                    async for piece in state.groq.stream(messages):
+                    usage_sink: dict = {}
+                    async for piece in state.groq.stream(messages, usage_sink=usage_sink):
                         collected.append(piece)
                         yield f"event: token\ndata: {json.dumps({'t': piece})}\n\n"
+                    _record_usage(rec, state.settings.groq_model, usage_sink or None)
                 response = finish_generated(guardrails, pending, "".join(collected))
             except GENERATION_FAILURE:
                 with trace.span("extractive_fallback"):

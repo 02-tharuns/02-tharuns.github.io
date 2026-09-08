@@ -236,6 +236,11 @@ export interface EvalRunSummary {
   recall_at_k: number;
   no_answer_accuracy: number;
   citation_correctness: number;
+  // Null on runs published before these categories existed.
+  answer_relevancy: number | null;
+  role_adherence: number | null;
+  knowledge_retention: number | null;
+  conversation_completeness: number | null;
   passed: boolean;
   git_sha: string | null;
 }

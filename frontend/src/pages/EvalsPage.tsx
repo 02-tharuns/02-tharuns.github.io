@@ -31,19 +31,64 @@ export default function EvalsPage() {
       <div className="obs-header">
         <h1>Evals</h1>
         <p>
-          Every push runs the 97-case suite (golden / adjacent / red-team / deflection) against the live API and publishes
-          the result here — <code>evals/run_evals_api.py</code>.
+          Every push runs the full suite (golden / adjacent / red-team / deflection / role / retention / completeness)
+          against the live API and publishes the result here — <code>evals/run_evals_api.py</code>.
         </p>
         {error && <p className="form-error">Could not reach the backend: {error}</p>}
       </div>
 
       {latest && (
         <div className="metric-cards">
-          <MetricCard label="Attack success" value={latest.attack_success_rate} threshold={0.05} lowerIsBetter />
-          <MetricCard label="False refusal" value={latest.false_refusal_rate} threshold={0.1} lowerIsBetter />
-          <MetricCard label="Recall@3" value={latest.recall_at_k} />
-          <MetricCard label="No-answer accuracy" value={latest.no_answer_accuracy} />
-          <MetricCard label="Citation correctness" value={latest.citation_correctness} />
+          {/* Safety & Guardrail Evals — displayed inverted (1 - rate) so the
+              card reads as "how resistant/how well-bounded", matching the
+              goodness framing of the name; the raw published number is still
+              the attack/refusal rate underneath. */}
+          <MetricCard
+            label="Jailbreak Resistance"
+            value={1 - latest.attack_success_rate}
+            threshold={0.95}
+            hint="resists prompt injection & attempts to break persona"
+          />
+          <MetricCard
+            label="Domain Boundary Awareness"
+            value={1 - latest.false_refusal_rate}
+            threshold={0.9}
+            hint="declines topics outside his real experience"
+          />
+          {/* Accuracy & Grounding Evals */}
+          <MetricCard
+            label="Context Precision & Recall"
+            value={latest.recall_at_k}
+            hint="retrieves the correct supporting document"
+          />
+          <MetricCard label="Answer Relevancy" value={latest.answer_relevancy} hint="cosine similarity, question ↔ answer" />
+          {/* Conversational & Behavioral Evals */}
+          <MetricCard
+            label="Role Adherence"
+            value={latest.role_adherence}
+            hint="stays on-persona, declines off-topic requests"
+          />
+          <MetricCard
+            label="Knowledge Retention"
+            value={latest.knowledge_retention}
+            hint="resolves follow-up questions from earlier turns"
+          />
+          <MetricCard
+            label="Conversation Completeness"
+            value={latest.conversation_completeness}
+            hint="answers every part of a multi-part question"
+          />
+          {/* Retained from the original build, outside the 8-category list above */}
+          <MetricCard
+            label="No-answer accuracy"
+            value={latest.no_answer_accuracy}
+            hint="correctly says 'not published' when info is absent"
+          />
+          <MetricCard
+            label="Citation correctness"
+            value={latest.citation_correctness}
+            hint="cited sources actually support the answer"
+          />
         </div>
       )}
 
@@ -108,18 +153,32 @@ function MetricCard({
   value,
   threshold,
   lowerIsBetter,
+  hint,
 }: {
   label: string;
-  value: number;
+  value: number | null | undefined;
   threshold?: number;
   lowerIsBetter?: boolean;
+  hint?: string;
 }) {
+  if (value === null || value === undefined) {
+    return (
+      <div className="metric-card">
+        <span className="metric-card-label">{label}</span>
+        <span className="metric-card-value">n/a</span>
+        {hint && <span className="metric-card-threshold">{hint}</span>}
+      </div>
+    );
+  }
   const ok = threshold === undefined ? value >= 0.9 : lowerIsBetter ? value <= threshold : value >= threshold;
   return (
-    <div className={`metric-card ${ok ? "ok" : "warn"}`}>
+    <div className={`metric-card ${ok ? "ok" : "warn"}`} title={hint}>
       <span className="metric-card-label">{label}</span>
       <span className="metric-card-value">{(value * 100).toFixed(1)}%</span>
-      {threshold !== undefined && <span className="metric-card-threshold">threshold {(threshold * 100).toFixed(0)}%</span>}
+      {hint && <span className="metric-card-threshold">{hint}</span>}
+      {threshold !== undefined && (
+        <span className="metric-card-threshold">threshold {(threshold * 100).toFixed(0)}%</span>
+      )}
     </div>
   );
 }

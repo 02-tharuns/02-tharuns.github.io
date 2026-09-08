@@ -27,14 +27,19 @@ def test_normalise_handles_smart_quotes_and_dashes():
 
 def test_chunk_markdown_matches_committed_corpus_size():
     """Regression guard: this must keep matching assets/corpus.js's chunk
-    count (72, per ARCHITECTURE.md) — a mismatch means textproc.py has
-    drifted from scripts/build_corpus.py's chunker."""
+    count (82, updated 2026-09-07 when the domain-fit docs — 32/33/34-domain-
+    *.md — and a new automotive/DARE-PM cross-reference section were added;
+    previously 72, per ARCHITECTURE.md; vocabulary bumped 987->988 the same
+    day when a "Robotics Laboratory" reference was corrected to "CNC and
+    Robotics Laboratory" against the actual transcript, adding "cnc" as a
+    term) — a mismatch means textproc.py has drifted from
+    scripts/build_corpus.py's chunker."""
     import pathlib
     content_dir = pathlib.Path(__file__).resolve().parent.parent.parent / "content"
     files = sorted(content_dir.glob("*.md"))
     chunks = []
     for path in files:
         chunks.extend(chunk_markdown(path.stem, path.read_text()))
-    assert len(chunks) == 72
+    assert len(chunks) == 82
     df, avgdl = compute_bm25_stats(chunks)
-    assert len(df) == 935
+    assert len(df) == 988

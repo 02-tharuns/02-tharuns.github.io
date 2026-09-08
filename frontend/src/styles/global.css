@@ -1,15 +1,20 @@
 :root {
-  --bg: #0b0c10;
-  --bg-raised: #14161c;
-  --bg-card: #191b22;
-  --border: #2a2d38;
-  --text: #e7e9ee;
-  --muted: #9aa0ae;
-  --accent: #f2a94a;
+  /* Ported from the v1 static site's palette (index.html) — flame, gold and
+     magenta over a warm near-black — so the v2 app keeps the same identity
+     instead of the generic neutral dark theme it launched with. */
+  --bg: #120a07;
+  --bg-raised: #1a0e09;
+  --bg-card: #241309;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #fcf4ee;
+  --muted: #ad9585;
+  --accent: #ff7a18;
+  --accent-soft: #ffc12e;
   --accent-2: #22c55e;
   --danger: #ef4444;
   --warn: #f59e0b;
-  --chart-grid: #22242e;
+  --chart-grid: #2e1c10;
+  --grad-brand: linear-gradient(100deg, #ff7a18 0%, #ffc12e 40%, #ec1e62 100%);
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -27,6 +32,26 @@ body {
 
 a { color: var(--accent); }
 
+/* ---------- Background wallpaper (ported from the v1 static site) ----------
+   Three fixed, viewport-anchored layers behind all content: a warm radial
+   glow (also the CSS fallback behind the WebGL canvas if it fails to init),
+   a faint grain texture, and a vignette to darken the edges. All z-index
+   negative so nothing else in the app needs to change. */
+.bg-canvas {
+  position: fixed; inset: 0; z-index: -3; opacity: 0.5; display: block; pointer-events: none;
+  background:
+    radial-gradient(ellipse 88% 68% at 64% -6%, #6b2408 0%, #301207 36%, var(--bg) 74%),
+    radial-gradient(ellipse 55% 45% at 8% 104%, #4a1020 0%, transparent 62%);
+}
+.bg-grain {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none; opacity: 0.035; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-vignette {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse 90% 75% at 50% 45%, transparent 45%, rgba(2, 3, 8, 0.65) 100%);
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -37,14 +62,22 @@ a { color: var(--accent); }
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 24px;
   padding: 16px 28px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: rgba(11, 12, 16, 0.9);
+  background: rgba(18, 10, 7, 0.82);
   backdrop-filter: blur(6px);
   z-index: 20;
 }
+.nav-cta {
+  border: 1px solid var(--border); color: var(--text); background: var(--bg-raised);
+  padding: 7px 16px; border-radius: 999px; font-size: 0.86rem; font-weight: 600;
+  text-decoration: none; white-space: nowrap; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+@media (max-width: 640px) { .topnav { flex-wrap: wrap; gap: 12px; } }
 
 .topnav-links { display: flex; gap: 28px; }
 .topnav-links a {
@@ -80,8 +113,12 @@ main { flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; width: 
 .section-nav a.active, .section-nav a:hover { color: var(--text); background: var(--bg-raised); }
 
 .hero { padding: 40px 0 32px; }
-.eyebrow { color: var(--accent); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
-.hero h1 { font-size: 2.6rem; margin: 0 0 18px; }
+.hero-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); margin-bottom: 18px; }
+.eyebrow { color: var(--accent-soft); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 10px; }
+.hero h1 {
+  font-size: 2.6rem; margin: 0 0 18px;
+  background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .hero-lede { color: var(--muted); font-size: 1.08rem; max-width: 70ch; }
 
 .content-section { padding: 36px 0; }
@@ -97,6 +134,8 @@ main { flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; width: 
 .badge-status { color: var(--accent); border-color: var(--accent); }
 .badge-link:hover { color: var(--text); border-color: var(--text); }
 .doc-subsection { margin-top: 12px; }
+.doc-photos { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 4px; }
+.doc-photos img { width: 220px; max-width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
 .doc-subsection h4 { margin: 0 0 4px; font-size: 0.9rem; color: var(--muted); font-weight: 600; }
 .doc-subsection p { margin: 0; }
 
@@ -105,7 +144,29 @@ main { flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; width: 
 
 .contact-section { padding: 36px 0; }
 .contact-copy p { color: var(--muted); }
-.contact-form { display: grid; gap: 14px; max-width: 480px; margin-top: 18px; }
+.contact-title {
+  font-size: 2.1rem; margin: 0 0 14px; max-width: 20ch;
+}
+.contact-title .grad-text {
+  background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.contact-methods { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 32px 0 0; }
+.contact-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 26px 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.contact-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.contact-icon {
+  width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 122, 24, 0.14); border: 1px solid var(--border); color: var(--accent-soft);
+}
+.contact-icon svg { width: 20px; height: 20px; }
+.contact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-family: var(--mono); }
+.contact-value { font-size: 0.92rem; color: var(--text); font-weight: 600; word-break: break-word; }
+.contact-note { margin-top: 28px; font-size: 0.84rem; color: var(--muted); }
+@media (max-width: 640px) { .contact-methods { grid-template-columns: 1fr; } }
+.contact-form { display: grid; gap: 14px; max-width: 480px; margin-top: 32px; }
 .form-row { display: flex; flex-direction: column; gap: 6px; }
 .form-row label { font-size: 0.82rem; color: var(--muted); }
 .form-row input, .form-row textarea {

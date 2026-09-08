@@ -33,6 +33,13 @@ export default function TraceWaterfall({ trace }: { trace: Trace }) {
         {trace.spans.map((span, i) => {
           const left = (span.started_at / total) * 100;
           const width = Math.max((span.duration_ms / total) * 100, 0.6);
+          const tokens = (span.meta?.prompt_tokens as number | undefined) ?? undefined;
+          const completionTokens = (span.meta?.completion_tokens as number | undefined) ?? undefined;
+          const costUsd = (span.meta?.cost_usd as number | undefined) ?? undefined;
+          const usageLabel =
+            tokens !== undefined && completionTokens !== undefined
+              ? `${tokens + completionTokens} tok${costUsd !== undefined ? ` · $${costUsd.toFixed(5)}` : ""}`
+              : null;
           return (
             <div className="trace-bar-row" key={i}>
               <span className="trace-bar-label">{span.name}</span>
@@ -47,7 +54,9 @@ export default function TraceWaterfall({ trace }: { trace: Trace }) {
                   title={`${span.name}: ${span.duration_ms.toFixed(2)} ms`}
                 />
               </div>
-              <span className="trace-bar-ms">{span.duration_ms.toFixed(2)} ms</span>
+              <span className="trace-bar-ms">
+                {span.duration_ms.toFixed(2)} ms{usageLabel && <span className="trace-bar-usage"> · {usageLabel}</span>}
+              </span>
             </div>
           );
         })}
