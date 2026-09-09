@@ -1,4 +1,4 @@
-import ContactForm from "../components/ContactForm";
+import { GearWheel } from "../components/HeroArt";
 
 const METHODS = [
   {
@@ -36,7 +36,8 @@ const METHODS = [
 
 export default function ContactPage() {
   return (
-    <section className="contact-section content-section-page">
+    <section className="contact-section content-section-page hero-art-host">
+      <GearWheel className="hero-art hero-art-wheel" />
       <p className="eyebrow">Contact</p>
       <h1 className="contact-title">
         Open to roles in <span className="grad-text">applied AI, IoT &amp; robotics.</span>
@@ -53,8 +54,6 @@ export default function ContactPage() {
         ))}
       </div>
       <p className="contact-note">Response usually within a day or two.</p>
-
-      <ContactForm />
     </section>
   );
 }

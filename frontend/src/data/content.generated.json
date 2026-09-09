@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T00:29:40.459Z",
+  "generatedAt": "2026-09-08T23:47:52.064Z",
   "documents": [
     {
       "id": "profile",
@@ -57,7 +57,7 @@
         },
         {
           "heading": "Bachelor of Engineering in Industrial and Production Engineering",
-          "text": "The National Institute of Engineering, completed September 2022. CGPA 7.45 out of 10. Relevant coursework: Statistical Quality Control, Metrology and Measurements, Control Engineering, Mechatronics, CNC and Robotics Laboratory."
+          "text": "The National Institute of Engineering, completed September 2022. CGPA 7.45 out of 10. Relevant coursework: Statistical Quality Control, Metrology and Measurements, Control Engineering, Mechatronics, CNC and Robotics Laboratory, Computer Integrated Manufacturing, Supply Chain and Logistics Management, Operations Research."
         },
         {
           "heading": "Why the industrial engineering degree matters",
@@ -420,24 +420,12 @@
       "volunteer": true,
       "sections": [
         {
-          "heading": "Automotive and ADAS relevant experience",
-          "text": "Tharun's published work sits in vehicle perception, vehicle networks and vehicle condition monitoring, which are the building blocks ADAS and active safety features are assembled from. Five projects carry that domain directly: traffic video perception with vehicle detection, tracking, classification and calibrated speed estimation; automatic number plate recognition with YOLOv5 detection and robustness testing under degraded imaging; CAN bus signal decoding and fault classification; brake and wheel-end condition monitoring built on rotor thermal physics; and drift-aware predictive maintenance reframed toward vehicle buzz, squeak and rattle detection. Ask him directly for the current state of any ADAS specific repository, since this site publishes a selected subset of his work."
+          "heading": "Exposure",
+          "text": "Automotive perception, vehicle networks, vehicle condition monitoring."
         },
         {
-          "heading": "Vehicle perception and camera pipelines",
-          "text": "Camera perception work covers object detection with YOLOv5, convolutional classification of vehicle types across four classes, MOG2 background subtraction, contour filtering, centroid tracking with multi-frame voting for identity stability, and speed estimation derived from centroid displacement, frame rate and lane-width calibration. Robustness was tested deliberately through rotation, brightness and contrast shifts, and synthetic occlusion, which is the failure-mode thinking driver assistance perception demands."
-        },
-        {
-          "heading": "Vehicle networks and in-vehicle signals",
-          "text": "CAN bus and controller area network experience comes from CANalyse Edge, a CAN signal decoding and diagnostic validation service built with python-can and cantools. The work covers decoding raw frames into physical signals, validating them against expected ranges, and classifying faults from the decoded stream."
-        },
-        {
-          "heading": "Sensor diagnostics and functional safety adjacent work",
-          "text": "Drift-aware edge predictive maintenance, per-feature ADWIN drift detection, rolling confidence and cross-sensor majority voting all address the same question active safety systems face: deciding whether a signal change is a real fault or a benign environmental shift before acting on it. Evaluation is done with group-level and session-level held-out splits so that reported accuracy survives contact with unseen vehicles and unseen recordings."
-        },
-        {
-          "heading": "Predictive maintenance reframed for vehicle NVH",
-          "text": "DARE-PM, originally an edge predictive-maintenance system for machinery vibration, was reframed under faculty mentorship toward vehicle buzz, squeak and rattle (NVH) detection, replacing single-detector drift diagnosis with a multi-signal arbitration layer: per-feature ADWIN, rolling confidence, and cross-sensor majority voting. The reframing exists because ADWIN alone cannot distinguish a genuine fault from a benign environmental shift, which is the same arbitration problem active-safety sensor fusion has to solve before anything reaches a controller."
+          "heading": "Related projects",
+          "text": "Traffic video perception: vehicle detection, tracking, classification and speed estimation with YOLOv5, MOG2 background subtraction and centroid tracking. Automatic number plate recognition: YOLOv5 detection with robustness testing under degraded imaging. CAN bus signal decoding and fault classification: CANalyse Edge, built with python-can and cantools. Brake and wheel-end condition monitoring: rotor thermal simulation and drag-torque inversion. Drift-aware predictive maintenance reframed for vehicle buzz, squeak and rattle (NVH) detection: per-feature ADWIN drift detection, rolling confidence, cross-sensor majority voting, evaluated with group-level and session-level held-out splits."
         }
       ]
     },
@@ -454,16 +442,12 @@
       "volunteer": true,
       "sections": [
         {
-          "heading": "Why industrial robotics and manufacturing roles fit his background",
-          "text": "His Bachelor of Engineering in Industrial and Production Engineering (The National Institute of Engineering, completed September 2022) supplies manufacturing-floor grounding a pure computer-science background does not: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and a CNC and robotics laboratory. Paired with a Master of Science in Artificial Intelligence, he understands both the physical production process and the ML layer built on top of it, which is the intersection industrial robotics and manufacturing-automation roles need."
+          "heading": "Exposure",
+          "text": "Industrial robotics, manufacturing automation, physical systems and condition monitoring."
         },
         {
-          "heading": "Physical systems and condition monitoring",
-          "text": "Three shipped projects work directly with physical hardware rather than only with pre-collected datasets: the Smart Brake and Wheel-End Condition Monitor's rotor thermal simulation and drag-torque inversion from cooling curves; DARE-PM's on-device predictive maintenance running on real vibration and acoustic streams; and the Edge Sensing Pipeline and Serverless Digital Twin, deployed against physical Raspberry Pi hardware rather than a simulator. All three are instances of the same manufacturing-floor problem: deciding, from a physical sensor signal, whether equipment is degrading before it fails."
-        },
-        {
-          "heading": "Career direction toward robotics and robot learning",
-          "text": "He is moving from sensor and time-series machine learning toward robotics and robot learning, and describes the bridge explicitly as data quality: deciding automatically which sensor data, or which demonstration, is trustworthy enough to train on — the same evaluation discipline (session-held-out splits, reporting a metric downward rather than keeping an indefensible number) he already applies to DARE-PM, the brake project, and the vehicle-speed work."
+          "heading": "Related projects",
+          "text": "Bachelor of Engineering in Industrial and Production Engineering (The National Institute of Engineering, 2022): statistical quality control, metrology and measurement systems, control engineering, mechatronics, CNC and robotics laboratory. Smart Brake and Wheel-End Condition Monitor: rotor thermal simulation and drag-torque inversion from cooling curves. DARE-PM: on-device predictive maintenance on vibration and acoustic sensor streams. Edge Sensing Pipeline and Serverless Digital Twin: deployed on physical Raspberry Pi hardware."
         }
       ]
     },
@@ -480,16 +464,12 @@
       "volunteer": true,
       "sections": [
         {
-          "heading": "Why industrial IoT and edge computing roles fit",
-          "text": "Three shipped projects run inference and telemetry directly on constrained or embedded hardware rather than only in notebooks: DARE-PM extracts 14 time-domain and frequency-domain features every 0.1 seconds on-device and reaches 3.8 millisecond inference latency; the Edge Sensing Pipeline runs DHT sensors on physical Raspberry Pi hardware over a Mosquitto MQTT broker; and the Smart Brake project's diagnostics are built to run against streaming sensor data rather than a static dataset. That is the core industrial-IoT constraint: a model has to run inside a millisecond or memory budget on hardware the size of a sensor node, not on a GPU cluster."
+          "heading": "Exposure",
+          "text": "Industrial IoT, edge computing, embedded inference."
         },
         {
-          "heading": "From MQTT telemetry to serverless alerting",
-          "text": "The Edge Sensing Pipeline was extended into a serverless digital twin on AWS IoT Core, routing threshold breaches through Lambda to SES email alerting — validated against real hardware, not a simulator, with real failure modes documented along the way: silent region mismatches between IoT Core, Lambda and SES, certificate filename drift, and a unit-conversion bug that tripped every threshold while passing casual tests. That is the same MQTT-to-cloud pattern (Mosquitto, Docker, InfluxDB, Grafana) DARE-PM's own deployment layer uses for its monitoring."
-        },
-        {
-          "heading": "Concept drift and false-alarm suppression at the edge",
-          "text": "DARE-PM's One-Class SVM plus ADWIN concept-drift pipeline cut false model adaptations from 49.87 percent to under 1 percent while sustaining an F1 score up to 0.80 — the characteristic failure mode of naive drift detectors, and the exact problem an industrial-IoT deployment has to solve before a predictive-maintenance alert is trustworthy enough for a technician to act on."
+          "heading": "Related projects",
+          "text": "DARE-PM: 14 time-domain and frequency-domain features extracted every 0.1 seconds on-device, 3.8 millisecond inference latency. Edge Sensing Pipeline: DHT temperature and humidity sensors on Raspberry Pi hardware over a Mosquitto MQTT broker. Serverless Digital Twin: AWS IoT Core, Lambda and SES email alerting. Concept-drift suppression pipeline: One-Class SVM plus ADWIN, false model adaptations cut from 49.87 percent to under 1 percent while sustaining an F1 score up to 0.80."
         }
       ]
     },
@@ -506,16 +486,12 @@
       "volunteer": true,
       "sections": [
         {
-          "heading": "Why general applied machine learning and data science roles fit",
-          "text": "Four projects sit outside the sensor and edge focus and demonstrate general tabular and time-series modelling: Credit Card Fraud Prediction (XGBoost with Bayesian hyperparameter tuning and SMOTE class-imbalance handling, 97 percent precision at 89 percent recall), the Supply Chain Risk pipeline (leakage-safe feature engineering over 180,000 orders, late-risk recall raised from 57.5 to 78.8 percent through decision-threshold tuning), Forecasting Used Car Prices (stacked regression lifting R-squared from 0.68 to 0.80), and the Automated ML Pipeline and Model Recommendation Platform (a reusable system spanning classification, regression, clustering and time-series workflows). Together they cover the standard applied machine learning loop end to end: data cleaning, leakage-safe feature engineering, model selection, threshold and decision tuning, and evaluation reported honestly rather than optimistically."
+          "heading": "Exposure",
+          "text": "Applied machine learning, tabular and time-series modelling, business-outcome optimisation."
         },
         {
-          "heading": "Business-outcome framing, not just model metrics",
-          "text": "Two of these projects were explicitly tuned against a business trade-off rather than a raw accuracy number: the supply-chain model's decision threshold was set at 0.40 specifically because a missed late shipment costs more than a false alarm someone can dismiss, and the used-car pricing dashboards were delivered to 8 stakeholders to support real pricing decisions rather than left as a notebook metric. The same discipline — reporting a metric downward whenever a higher figure cannot be defended — carries over from his sensor and edge work."
-        },
-        {
-          "heading": "Feature engineering and dimensionality",
-          "text": "The supply-chain pipeline is the clearest case of that discipline showing up on tabular data instead of sensor data: reduced one-hot encoded dimensionality from over 64,000 features to 339 through high-cardinality feature optimisation, a data-modelling decision rather than a library default."
+          "heading": "Related projects",
+          "text": "Credit Card Fraud Prediction: XGBoost with Bayesian hyperparameter tuning and SMOTE class-imbalance handling, 97 percent precision at 89 percent recall. Supply Chain Risk pipeline: leakage-safe feature engineering over 180,000 orders, late-risk recall raised from 57.5 to 78.8 percent through decision-threshold tuning, one-hot dimensionality reduced from over 64,000 features to 339. Forecasting Used Car Prices: stacked regression lifting R-squared from 0.68 to 0.80, delivered to 8 stakeholders. Automated ML Pipeline and Model Recommendation Platform: classification, regression, clustering and time-series workflows."
         }
       ]
     },

@@ -8,7 +8,9 @@ export default function PortfolioLayout() {
   return (
     <div className="portfolio">
       <SectionNav />
-      <Outlet />
+      <div className="portfolio-content">
+        <Outlet />
+      </div>
     </div>
   );
 }

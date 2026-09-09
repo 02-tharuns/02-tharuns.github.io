@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import PortfolioLayout from "./pages/PortfolioLayout";
 import AboutPage from "./pages/AboutPage";
@@ -14,10 +15,27 @@ import { BOT_NAME } from "./lib/config";
 
 export default function App() {
   const location = useLocation();
+  const topnavRef = useRef<HTMLElement>(null);
   // "Portfolio" covers every section page (About, Projects, Education,
   // Skills, Achievements, Contact) — active whenever we're not on one of
   // the other two top-level tabs, rather than only on an exact path match.
   const portfolioActive = !location.pathname.startsWith("/observability") && !location.pathname.startsWith("/evals");
+
+  // The top nav wraps to two lines on narrow phones (see .topnav's
+  // flex-wrap breakpoint), so its rendered height isn't a fixed number —
+  // a hardcoded `top` offset for anything docking under it (the section
+  // nav) would either leave a gap or get covered. Measuring it directly
+  // and publishing it as a CSS var keeps every sticky-under-the-header
+  // element correct at any width without hand-tuned breakpoint math.
+  useEffect(() => {
+    const el = topnavRef.current;
+    if (!el) return;
+    const setHeight = () => document.documentElement.style.setProperty("--topnav-h", `${el.offsetHeight}px`);
+    setHeight();
+    const observer = new ResizeObserver(setHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="app-shell">
@@ -25,7 +43,7 @@ export default function App() {
       <div className="bg-grain" aria-hidden="true" />
       <div className="bg-vignette" aria-hidden="true" />
 
-      <header className="topnav">
+      <header className="topnav" ref={topnavRef}>
         <nav className="topnav-links">
           <NavLink to="/about" className={() => (portfolioActive ? "active" : "")}>
             Portfolio

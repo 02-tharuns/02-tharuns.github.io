@@ -101,16 +101,40 @@ main { flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; width: 
 }
 
 /* ---------- Portfolio ---------- */
+/* Vertical sidebar layout: the section nav is a fixed-width column pinned
+   down the left, the routed page content fills the rest — easier to jump
+   between sections than the old horizontal pill row, since every link is
+   visible at once without scrolling past the page content first. */
+
+.portfolio { display: flex; align-items: flex-start; gap: 32px; margin-top: 28px; }
+.portfolio-content { flex: 1; min-width: 0; }
 
 .section-nav {
-  display: flex; flex-wrap: wrap; gap: 4px; margin: 28px 0 0; padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px; flex: 0 0 168px;
+  /* --topnav-h is measured live in App.tsx (the header wraps to 2 lines on
+     narrow phones, so its height isn't a fixed number) — falls back to 84px
+     before the first measurement lands. */
+  position: sticky; top: var(--topnav-h, 84px); padding-right: 16px; border-right: 1px solid var(--border);
 }
 .section-nav a {
   text-decoration: none; color: var(--muted); font-size: 0.88rem; font-weight: 500;
-  padding: 6px 14px; border-radius: 999px;
+  padding: 8px 14px; border-radius: 8px;
 }
 .section-nav a.active, .section-nav a:hover { color: var(--text); background: var(--bg-raised); }
+
+@media (max-width: 760px) {
+  .portfolio { flex-direction: column; gap: 4px; }
+  .section-nav {
+    /* Sticky here too (not static) so the page links stay reachable while
+       scrolling on a phone, same as the desktop sidebar — docked right
+       under the top nav via the measured --topnav-h offset, with its own
+       translucent background since content now scrolls underneath it. */
+    flex-direction: row; flex-wrap: wrap; position: sticky; top: var(--topnav-h, 64px); width: 100%;
+    padding: 10px 0 12px; border-right: none; border-bottom: 1px solid var(--border);
+    background: rgba(18, 10, 7, 0.92); backdrop-filter: blur(6px); z-index: 15;
+  }
+  .section-nav a { padding: 6px 14px; border-radius: 999px; }
+}
 
 .hero { padding: 40px 0 32px; }
 .hero-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); margin-bottom: 18px; }
@@ -134,10 +158,34 @@ main { flex: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; width: 
 .badge-status { color: var(--accent); border-color: var(--accent); }
 .badge-link:hover { color: var(--text); border-color: var(--text); }
 .doc-subsection { margin-top: 12px; }
-.doc-photos { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 4px; }
-.doc-photos img { width: 220px; max-width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
+/* Grid, not flex-wrap: fixed-width flex items leave a short dangling last
+   row when the count is odd/uneven, which read as "not aligned" next to the
+   Contact page's even 3-column grid. auto-fit + minmax stretches every tile
+   to share the row evenly, same alignment principle as .contact-methods. */
+.doc-photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 14px 0 4px; }
+.doc-photos img {
+  /* Square rather than 4:3, and anchored to the top: portrait people-photos
+     (e.g. the WayneHacks team photo) get cropped from the bottom (legs/feet)
+     instead of symmetrically off the top and bottom, so faces stay in frame
+     instead of being cropped down to torsos. */
+  width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: top; border-radius: 10px; border: 1px solid var(--border);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.doc-photos img:hover { transform: translateY(-3px); border-color: var(--accent); }
 .doc-subsection h4 { margin: 0 0 4px; font-size: 0.9rem; color: var(--muted); font-weight: 600; }
 .doc-subsection p { margin: 0; }
+
+/* Decorative hero art (gear wheel / robot arm / loss chart, see HeroArt.tsx)
+   — absolutely positioned behind the real content of the page it's hosted
+   on, never intercepting clicks, hidden below a width where it would just
+   collide with the text instead of sitting beside it. */
+.hero-art-host { position: relative; }
+.hero-art { position: absolute; z-index: 0; pointer-events: none; opacity: 0.85; }
+.hero-art-host > :not(.hero-art) { position: relative; z-index: 1; }
+.hero-art-wheel { width: 220px; height: 220px; top: -10px; right: 40px; }
+.hero-art-robot-about { width: 320px; height: 208px; top: 40px; right: 20px; }
+.hero-art-loss { width: 170px; height: 120px; top: 0; right: 0; }
+@media (max-width: 900px) { .hero-art { display: none; } }
 
 .rag-flash { animation: flash 1.6s ease; }
 @keyframes flash { 0% { background: rgba(242, 169, 74, 0.25); } 100% { background: transparent; } }

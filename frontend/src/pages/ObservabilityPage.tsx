@@ -125,8 +125,12 @@ export default function ObservabilityPage() {
           value={health.total ? `${((health.refused / health.total) * 100).toFixed(0)}%` : "—"}
           ok={!health.total || health.refused / health.total <= 0.4}
         />
-        <HealthCard label="Avg latency" value={health.total ? `${health.avgMs.toFixed(0)} ms` : "—"} />
-        <HealthCard label="p95 latency" value={health.total ? `${health.p95Ms.toFixed(0)} ms` : "—"} />
+        <HealthCard label="Avg response time" value={health.total ? `${health.avgMs.toFixed(0)} ms` : "—"} />
+        <HealthCard
+          label="Slowest response time"
+          value={health.total ? `${health.p95Ms.toFixed(0)} ms` : "—"}
+          hint="95th percentile — 19 out of 20 questions answer faster than this"
+        />
         <HealthCard label="Ungrounded rate" value={health.total ? `${(health.errorRate * 100).toFixed(1)}%` : "—"} ok={health.errorRate <= 0.02} />
         <HealthCard label="Visitor reports" value={String(reports.length)} ok={reports.length === 0} />
         <HealthCard label="Tokens (window)" value={health.pricedGenerations || health.totalTokens ? health.totalTokens.toLocaleString() : "—"} />
@@ -202,11 +206,12 @@ export default function ObservabilityPage() {
   );
 }
 
-function HealthCard({ label, value, ok }: { label: string; value: string; ok?: boolean }) {
+function HealthCard({ label, value, ok, hint }: { label: string; value: string; ok?: boolean; hint?: string }) {
   return (
-    <div className={`metric-card ${ok === false ? "warn" : "ok"}`}>
+    <div className={`metric-card ${ok === false ? "warn" : "ok"}`} title={hint}>
       <span className="metric-card-label">{label}</span>
       <span className="metric-card-value">{value}</span>
+      {hint && <span className="metric-card-threshold">{hint}</span>}
     </div>
   );
 }
