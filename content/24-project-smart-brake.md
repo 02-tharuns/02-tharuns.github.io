@@ -12,6 +12,10 @@ domain: automotive
 ## Smart Brake and Wheel-End Condition Monitor overview
 A physics-first brake and wheel-end diagnostic system, currently in progress, built with a collaborator. Stack: Python, NumPy, scikit-learn, pytest, ruff, GitHub Actions. Tharun owns the thermal simulation, drag-torque injection and torque-inversion work.
 
+<!-- display:
+A physics-first brake and wheel-end diagnostic system, currently in progress, built with a collaborator. Stack: Python, NumPy, scikit-learn, pytest, ruff, GitHub Actions. I own the thermal simulation, drag-torque injection and torque-inversion work.
+-->
+
 ## Brake rotor thermal simulation
 Modelled rotor thermal behaviour with a lumped-capacitance simulator incorporating speed-dependent convection and radiation. Injected residual caliper drag torque across four severity levels, over a dual-wheel front-left and front-right configuration.
 

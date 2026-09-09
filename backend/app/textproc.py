@@ -282,13 +282,25 @@ class Chunk:
         )
 
 
+_DISPLAY_OVERRIDE_RE = re.compile(r"<!--\s*display:.*?-->", re.DOTALL)
+
+
 def chunk_markdown(path_stem: str, raw_text: str) -> list[Chunk]:
+    """content/*.md sections may carry a `<!-- display: ... -->` block — a
+    first-person rewrite the website shows on the page (see
+    frontend/scripts/build-content.mjs) while Chappie itself must keep
+    answering in the third person about Tharun (backend/app/generation/
+    prompt.py). Retrieval, embeddings, and the extractive-fallback excerpts
+    in guardrails/gates.py all read `chunk.text`, so that field must never
+    contain the first-person override — stripped here before anything else
+    touches it, leaving the original third-person prose intact."""
     meta, body = parse_front_matter(raw_text)
     doc_id = meta.get("id") or path_stem
     chunks: list[Chunk] = []
     for block in re.split(r"^## ", body, flags=re.M)[1:]:
         heading, _, text = block.partition("\n")
         heading = heading.strip()
+        text = _DISPLAY_OVERRIDE_RE.sub("", text)
         text = " ".join(text.split())
         if not text:
             continue

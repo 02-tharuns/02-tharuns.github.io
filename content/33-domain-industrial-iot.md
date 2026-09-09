@@ -1,7 +1,7 @@
 ---
 id: edgeiot
 section: skills
-title: Industrial IoT and edge computing fit
+title: Industrial IoT and edge computing
 type: domain
 date: 2026-09
 domain: industrial, ai

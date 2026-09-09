@@ -35,13 +35,24 @@ function parseFrontMatter(raw) {
   return [meta, raw.slice(end + 4)];
 }
 
+// A section body may carry a `<!-- display: ... -->` block — a first-person
+// rewrite for the page itself, since Chappie (the chatbot) must keep
+// answering in the third person about Tharun regardless of how the page
+// reads. When present, the display override is what visitors see here;
+// the third-person prose outside the comment is what backend/app/textproc.py
+// chunks for retrieval instead (see chunk_markdown's matching regex there).
+const DISPLAY_OVERRIDE_RE = /<!--\s*display:([\s\S]*?)-->/;
+
 function chunkSections(body) {
   const blocks = body.split(/^## /m).slice(1);
   return blocks.map((block) => {
     const nl = block.indexOf("\n");
     const heading = (nl === -1 ? block : block.slice(0, nl)).trim();
-    const text = nl === -1 ? "" : block.slice(nl + 1).split(/\s+/).join(" ").trim();
-    return { heading, text };
+    const rest = nl === -1 ? "" : block.slice(nl + 1);
+    const displayMatch = rest.match(DISPLAY_OVERRIDE_RE);
+    const display = displayMatch ? displayMatch[1].split(/\s+/).join(" ").trim() : "";
+    const base = rest.replace(DISPLAY_OVERRIDE_RE, "").split(/\s+/).join(" ").trim();
+    return { heading, text: display || base };
   }).filter((s) => s.text);
 }
 

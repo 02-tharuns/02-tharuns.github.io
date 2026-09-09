@@ -117,13 +117,22 @@ def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")[:34]
 
 
+_DISPLAY_OVERRIDE_RE = re.compile(r"<!--\s*display:.*?-->", re.DOTALL)
+
+
 def chunk_file(path: pathlib.Path):
+    """Mirrors backend/app/textproc.py's chunk_markdown, including stripping
+    a `<!-- display: ... -->` first-person override (see that file's
+    docstring) — v1's chatbot.js answers purely by quoting indexed text
+    verbatim, so leaking first-person prose into this corpus would be worse
+    here than anywhere else in the codebase."""
     meta, body = parse_front_matter(path.read_text())
     doc_id = meta.get("id") or path.stem
     chunks = []
     for block in re.split(r"^## ", body, flags=re.M)[1:]:
         heading, _, text = block.partition("\n")
         heading = heading.strip()
+        text = _DISPLAY_OVERRIDE_RE.sub("", text)
         text = " ".join(text.split())
         if not text:
             continue

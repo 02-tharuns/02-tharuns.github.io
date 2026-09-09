@@ -18,3 +18,7 @@ The National Institute of Engineering, completed September 2022. CGPA 7.45 out o
 
 ## Why the industrial engineering degree matters
 The Industrial and Production Engineering degree supplies manufacturing process knowledge that a pure computer science background does not: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and CNC and robotics laboratory work. It means he understands a fabrication or production floor as an engineer rather than as a visitor, which is directly relevant to industrial robotics, manufacturing quality engineering, and digital-twin modelling of facilities.
+
+<!-- display:
+The Industrial and Production Engineering degree gives me manufacturing process knowledge that a pure computer science background doesn't: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and CNC and robotics laboratory work. It means I understand a fabrication or production floor as an engineer rather than as a visitor, which is directly relevant to industrial robotics, manufacturing quality engineering, and digital-twin modelling of facilities.
+-->

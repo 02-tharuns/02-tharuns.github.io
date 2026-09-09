@@ -76,10 +76,6 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="site-footer">
-        <span>Built with a hybrid BM25 + dense + rerank RAG pipeline. Every answer is cited.</span>
-      </footer>
-
       <ChatWidget botName={BOT_NAME} />
     </div>
   );

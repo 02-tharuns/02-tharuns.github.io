@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T23:47:52.064Z",
+  "generatedAt": "2026-09-09T00:34:39.979Z",
   "documents": [
     {
       "id": "profile",
@@ -15,19 +15,19 @@
       "sections": [
         {
           "heading": "Who Tharun Subramanya is",
-          "text": "Tharun Subramanya is an applied machine learning engineer working on industrial systems, edge IoT, and robotics. He holds a Master of Science in Artificial Intelligence from the University of Michigan-Dearborn, completed in May 2026 with a GPA of 3.74 out of 4.00. His background combines Industrial and Production Engineering with applied AI."
+          "text": "I'm an applied machine learning engineer working on industrial systems, edge IoT, and robotics. I hold a Master of Science in Artificial Intelligence from the University of Michigan-Dearborn, completed in May 2026 with a GPA of 3.74 out of 4.00. My background combines Industrial and Production Engineering with applied AI."
         },
         {
           "heading": "What he works on",
-          "text": "His applied machine learning work spans CAN-bus fault classification, vibration-based condition monitoring, drift-aware edge predictive maintenance, and computer-vision perception pipelines. He is currently extending that sensor-level diagnostic foundation toward robotics and physical AI systems."
+          "text": "My applied machine learning work spans CAN-bus fault classification, vibration-based condition monitoring, drift-aware edge predictive maintenance, and computer-vision perception pipelines. I'm currently extending that sensor-level diagnostic foundation toward robotics and physical AI systems."
         },
         {
           "heading": "How he approaches evaluation",
-          "text": "His work is consistently grounded in data-quality validation and session-held-out evaluation rather than inflated benchmark numbers. Reported metrics are revised downward whenever a higher figure cannot be defended. Splits are held out by recording session, by video, or by group so that neighbouring samples never leak across an evaluation boundary."
+          "text": "My work is consistently grounded in data-quality validation and session-held-out evaluation rather than inflated benchmark numbers. I revise reported metrics downward whenever a higher figure can't be defended. I hold out splits by recording session, by video, or by group so that neighbouring samples never leak across an evaluation boundary."
         },
         {
           "heading": "Career direction",
-          "text": "He is moving from sensor and time-series machine learning toward robotics and robot learning. The bridge is data quality: deciding automatically which sensor data, or which demonstration, is trustworthy enough to train on. He is open to roles in applied AI, industrial IoT, edge AI, and robotics."
+          "text": "I'm moving from sensor and time-series machine learning toward robotics and robot learning. The bridge is data quality: deciding automatically which sensor data, or which demonstration, is trustworthy enough to train on. I'm open to roles in applied AI, industrial IoT, edge AI, and robotics."
         },
         {
           "heading": "Career timeline",
@@ -61,7 +61,7 @@
         },
         {
           "heading": "Why the industrial engineering degree matters",
-          "text": "The Industrial and Production Engineering degree supplies manufacturing process knowledge that a pure computer science background does not: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and CNC and robotics laboratory work. It means he understands a fabrication or production floor as an engineer rather than as a visitor, which is directly relevant to industrial robotics, manufacturing quality engineering, and digital-twin modelling of facilities."
+          "text": "The Industrial and Production Engineering degree gives me manufacturing process knowledge that a pure computer science background doesn't: statistical quality control, metrology and measurement systems, control engineering, mechatronics, and CNC and robotics laboratory work. It means I understand a fabrication or production floor as an engineer rather than as a visitor, which is directly relevant to industrial robotics, manufacturing quality engineering, and digital-twin modelling of facilities."
         }
       ]
     },
@@ -207,7 +207,7 @@
       "sections": [
         {
           "heading": "Smart Brake and Wheel-End Condition Monitor overview",
-          "text": "A physics-first brake and wheel-end diagnostic system, currently in progress, built with a collaborator. Stack: Python, NumPy, scikit-learn, pytest, ruff, GitHub Actions. Tharun owns the thermal simulation, drag-torque injection and torque-inversion work."
+          "text": "A physics-first brake and wheel-end diagnostic system, currently in progress, built with a collaborator. Stack: Python, NumPy, scikit-learn, pytest, ruff, GitHub Actions. I own the thermal simulation, drag-torque injection and torque-inversion work."
         },
         {
           "heading": "Brake rotor thermal simulation",
@@ -432,7 +432,7 @@
     {
       "id": "robotics",
       "section": "skills",
-      "title": "Industrial robotics and manufacturing fit",
+      "title": "Industrial robotics and manufacturing",
       "type": "domain",
       "domain": "robotics, industrial",
       "date": "2026-09",
@@ -454,7 +454,7 @@
     {
       "id": "edgeiot",
       "section": "skills",
-      "title": "Industrial IoT and edge computing fit",
+      "title": "Industrial IoT and edge computing",
       "type": "domain",
       "domain": "industrial, ai",
       "date": "2026-09",
@@ -476,7 +476,7 @@
     {
       "id": "datascience",
       "section": "skills",
-      "title": "General applied machine learning and data science fit",
+      "title": "General applied machine learning and data science",
       "type": "domain",
       "domain": "data-science, ai",
       "date": "2026-09",
@@ -569,28 +569,28 @@
       "volunteer": true,
       "sections": [
         {
-          "heading": "Chappie, the retrieval system running on this site",
-          "text": "Chappie is a retrieval-augmented generation system Tharun built over his own CV, projects, education and skills. It runs entirely in the visitor's browser on GitHub Pages, with no server, no API key and no cold start. Retrieval is Okapi BM25 over a prebuilt index, with query expansion and same-document damping, and a full question is answered in roughly five milliseconds."
+          "heading": "Chappie, the retrieval and generation system running on this site",
+          "text": "I built Chappie as a hybrid retrieval-augmented generation system over my own CV, projects, education and skills. The frontend is React, TypeScript and Vite deployed on Vercel; the backend is a FastAPI service deployed on Render. Retrieval combines BM25 lexical search with Qdrant Cloud dense vector search, fused with reciprocal rank fusion and reranked with a cross-encoder before an answer is generated."
         },
         {
           "heading": "How Chappie is guarded",
-          "text": "Six gates run in order of cost: input hygiene, prompt-injection screening, out-of-distribution scope detection, an evidence floor applied after retrieval, and citation integrity checked on the way out. Answering is extractive, meaning sentences are quoted from the indexed source rather than paraphrased by a generative model, which makes a fabricated claim structurally impossible rather than merely unlikely."
+          "text": "The guardrail gates run as a sequence I ported gate-for-gate from an earlier browser-only build: input hygiene, prompt-injection screening, out-of-distribution scope detection, an evidence floor applied after retrieval, and citation integrity checked after generation. The evidence floor blocks generation entirely when nothing clears a calibrated confidence score, and citation validation runs on both the server and the client, rejecting any answer that cites a passage it didn't actually retrieve."
         },
         {
           "heading": "How Chappie is evaluated",
-          "text": "A 69-case evaluation suite across four groups runs in headless Chromium against the real page on every push, and blocks the deployment on regression. It reports attack success rate and false refusal rate, the second being the measure most projects skip. Both currently sit at zero."
+          "text": "I run a 97-case evaluation suite across seven groups (golden, adjacent, red-team, deflection, role, retention and completeness) against the live backend on every push, and publish each run, pass/fail counts and every individual case, to the Evals dashboard on this site. It reports attack success rate and false refusal rate, the second being the measure most projects skip. Both currently sit at zero."
         },
         {
           "heading": "The generative answering path and LLM API integration",
-          "text": "The generative path is implemented and ships disabled by default. A FastAPI service deployable to Azure Container Apps holds the model key server-side, receives the question together with the already-retrieved passages, and returns a generated answer that may cite only passages that were actually retrieved. Citation validation runs on both the server and the client, so a hallucinated source is rejected rather than displayed."
+          "text": "The FastAPI backend I deployed on Render holds the Groq API key server-side. It receives a question, runs hybrid retrieval and reranking, then streams a generated answer from a Groq-hosted model back to the browser over server-sent events. The answer may cite only passages that were actually retrieved. Citation validation runs on both the server and the client, so a hallucinated source is rejected rather than displayed. Every stage, gates, retrieval, fusion, reranking and generation, is recorded as a trace span and rendered live on the site's Observability page."
         },
         {
           "heading": "Ingestion pipeline behind the retrieval system",
-          "text": "An offline Python pipeline chunks Markdown source documents on their headings, tokenises and stems them with a stemmer mirrored exactly in the browser, computes BM25 term statistics, and emits a single static index file. Continuous integration fails the build if the committed index has drifted out of date with the source documents."
+          "text": "I built an offline pipeline that chunks the Markdown source documents on their headings, tokenises and stems the text, and builds the retrieval index: a shared BM25 vocabulary for lexical scoring plus Qdrant Cloud embeddings for dense search. I mirror the same chunking logic across the backend, the frontend build step and an earlier browser-only build so all three stay in sync. Continuous integration fails the build if a generated index has drifted out of date with the source documents."
         },
         {
           "heading": "Generative AI and LLM tooling",
-          "text": "Tharun's AI framework skills are Hugging Face Transformers, LangChain and LlamaIndex, and he lists OpenAI and Anthropic among the LLM tooling he works with. He is working through a self-directed generative AI and LLM track covering Hugging Face, LangChain and retrieval-augmented generation."
+          "text": "My AI framework skills are Hugging Face Transformers, LangChain and LlamaIndex, and I count OpenAI and Anthropic among the LLM tooling I work with. I'm working through a self-directed generative AI and LLM track covering Hugging Face, LangChain and retrieval-augmented generation."
         }
       ]
     }

@@ -1,7 +1,7 @@
 ---
 id: robotics
 section: skills
-title: Industrial robotics and manufacturing fit
+title: Industrial robotics and manufacturing
 type: domain
 date: 2026-09
 domain: robotics, industrial

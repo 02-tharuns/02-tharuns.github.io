@@ -1,7 +1,7 @@
 ---
 id: datascience
 section: skills
-title: General applied machine learning and data science fit
+title: General applied machine learning and data science
 type: domain
 date: 2026-09
 domain: data-science, ai

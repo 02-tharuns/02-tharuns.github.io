@@ -53,7 +53,6 @@ export default function ContactPage() {
           </a>
         ))}
       </div>
-      <p className="contact-note">Response usually within a day or two.</p>
     </section>
   );
 }
